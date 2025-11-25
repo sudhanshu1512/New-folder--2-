@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaUserShield, FaDatabase, FaCookieBite, FaLock, FaEnvelope, FaHandshake } from 'react-icons/fa';
-import './rivacyPolicy.css';
+import './PrivacyPolicy.css';
 
 const PrivacyPolicy = () => {
     return (

@@ -9,7 +9,7 @@ import {
   FaTag,
   FaCheckCircle
 } from 'react-icons/fa';
-import './AboutUs.css';
+import './Aboutus.css';
 import { useNavigate } from 'react-router-dom';
 
 const AboutUs = () => {
