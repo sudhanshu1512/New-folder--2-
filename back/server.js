@@ -4,9 +4,11 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { initializeEmailQueue, shutdownEmailQueue } from './src/startup/emailQueueInit.js';
+import path from "path";
 
 
-
+const _dirname = path.resolve();
+console.log("Current directory:", _dirname);
 
 // Verify required environment variables
 const requiredEnvVars = ['DB_SERVER', 'DB_NAME', 'JWT_SECRET', 'FRONTEND_URL'];
@@ -69,6 +71,11 @@ app.use('/api', supplierRoutes);
 app.use('/api', dashboardRoutes);
 app.use('/api/ledger', ledgerRoutes);
 app.use('/api', queryRoutes);
+
+app.use(express.static(path.join(_dirname, "/front/dist")));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(_dirname, "front", "dist", "index.html"));
+})
 
 // Log all registered routes
 console.log('Registered routes:');
