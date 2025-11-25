@@ -1,0 +1,1345 @@
+/*
+|--------------------------------------------------------------------------
+| CORE LAYOUT & STRUCTURE
+|--------------------------------------------------------------------------
+*/
+
+/* Flight Details Modal Styles */
+.flightSummary {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #e2e8f0;
+}
+
+.summaryRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.summaryRow:last-child {
+    margin-bottom: 0;
+}
+
+.summaryLabel {
+    font-weight: 600;
+    color: #4a5568;
+    min-width: 80px;
+}
+
+.summaryValue {
+    color: #2d3748;
+    margin-right: 1.5rem;
+}
+
+.fareTableContainer {
+    margin: 25px 0;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+.fareTableContainer h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.fareTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 15px;
+    font-size: 14px;
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.fareTable th,
+.fareTable td {
+    padding: 12px 15px;
+    text-align: left;
+    border: 1px solid #e8e8e8;
+    vertical-align: top;
+}
+
+.fareTable th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #333;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+}
+
+.fareTable tr:nth-child(even) {
+    background-color: #fcfcfc;
+}
+
+.fareTable tr:hover {
+    background-color: #f8f9ff;
+    transition: all 0.2s;
+}
+
+.actionButton:hover {
+    background-color: #edf2f7;
+    color: #2b6cb0;
+}
+
+.summarySection {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.summaryBox {
+    text-align: center;
+    padding: 0.75rem 1.5rem;
+    background: #f8fafc;
+    border-radius: 6px;
+    min-width: 120px;
+}
+
+.summaryBox h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.875rem;
+    color: #4a5568;
+    font-weight: 500;
+}
+
+.summaryBox .summaryValue {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0;
+}
+
+.noData {
+    text-align: center;
+    padding: 2rem;
+    color: #718096;
+    font-style: italic;
+}
+
+.pnrContainer {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    background-color: #f9fafb;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+/*
+|--------------------------------------------------------------------------
+| HEADER & BUTTONS
+|--------------------------------------------------------------------------
+*/
+
+.pnrHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.pnrHeader h1 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.pnrHeaderButtons {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.btnPrimary,
+.btnSecondary,
+.btnSearch {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btnPrimary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btnPrimary:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+}
+
+.btnSecondary {
+    background-color: #e9ecef;
+    color: #343a40;
+}
+
+/*
+|--------------------------------------------------------------------------
+| FILTERS / SEARCH BAR
+|--------------------------------------------------------------------------
+*/
+
+.pnrFilters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.filterGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 190px;
+    position: relative;
+}
+
+.filterGroup label {
+    font-size: 0.85rem;
+    color: #4a5568;
+    font-weight: 500;
+}
+
+.pnrFilters select,
+.pnrFilters input {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background-color: #fff;
+    transition: all 0.2s ease;
+}
+
+.pnrFilters select:focus,
+.pnrFilters input:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+}
+
+.pnrFilters input[type="text"] {
+    height: 40px;
+}
+
+.btnSearch {
+    background-color: #ff6a00;
+    color: white;
+    border: none;
+    margin-top: 20px;
+    border-radius: 6px;
+    padding: 0 1.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btnSearch:hover {
+    background-color: #e85b00;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btnSearch:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Add a subtle shine effect on hover */
+.btnSearch::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 50%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(30deg);
+    transition: all 0.6s ease;
+    opacity: 0;
+}
+
+.btnSearch:hover::after {
+    left: 120%;
+    opacity: 1;
+}
+
+/* Search button container */
+.searchButtonContainer {
+    display: flex;
+    align-items: flex-end;
+    height: 100%;
+    padding-bottom: 4px;
+    /* Align with other inputs */
+}
+
+/* Airline Dropdown Styles */
+.airportSelectContainer {
+    position: relative;
+    width: 100%;
+}
+
+.airportInput {
+    width: 100%;
+    height: 40px;
+    padding: 8px 12px;
+    padding-right: 30px; /* Space for arrow */
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: white;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.airportInput:focus {
+    border-color: #3182ce;
+    box-shadow: 0 0 0 1px #3182ce;
+}
+
+.dropdownArrow {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #718096;
+    font-size: 12px;
+    pointer-events: none;
+}
+
+.airportDropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    margin-top: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.airportDropdown.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.airportOption {
+    padding: 10px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #f7fafc;
+    transition: background-color 0.2s;
+    font-size: 14px;
+}
+
+.airportOption:last-child {
+    border-bottom: none;
+}
+
+.airportOption:hover {
+    background-color: #f7fafc;
+}
+
+.loadingIndicator {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #718096;
+    pointer-events: none;
+}
+
+/* Make sure all filter inputs have consistent height */
+.pnrFilters select,
+.pnrFilters input[type="date"],
+.pnrFilters input[type="text"] {
+    height: 40px;
+    box-sizing: border-box;
+}
+
+/*
+|--------------------------------------------------------------------------
+| TABLE
+|--------------------------------------------------------------------------
+*/
+
+.pnrTableContainer {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    overflow-x: auto;
+    min-width: 0;
+}
+
+.pnrTable {
+    width: 100%;
+    min-width: 1200px;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.pnrTable th,
+.pnrTable td {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid #dee2e6;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.pnrTable th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+}
+
+.pnrTable tr:hover {
+    background-color: #f1f3f5;
+}
+
+/*
+|--------------------------------------------------------------------------
+| ACTION ICONS & LINKS
+|--------------------------------------------------------------------------
+*/
+
+.actionCell {
+    cursor: pointer;
+}
+
+.actionCell:hover {
+    text-decoration: underline;
+}
+
+.textBlue {
+    color: #007bff;
+}
+
+.textGreen {
+    color: #28a745;
+}
+
+.textRed {
+    color: #dc3545;
+}
+
+.updateIcon,
+.deleteIcon {
+    margin: 0 0.4rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.updateIcon:hover,
+.deleteIcon:hover {
+    transform: scale(1.2);
+}
+
+.deleteIcon {
+    color: #dc3545;
+}
+
+/*
+|--------------------------------------------------------------------------
+| STATUS SWITCH
+|--------------------------------------------------------------------------
+*/
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.slider {
+    background-color: #28a745;
+}
+
+input:checked+.slider:before {
+    transform: translateX(20px);
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| MODAL BASE & LAYOUT
+|--------------------------------------------------------------------------
+*/
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.modal {
+    background: white;
+    padding: 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 800px;
+    max-width: 100%;
+    max-height: 100vh;
+    position: relative;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.modalHeader {
+    padding: 16px 24px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 8px 8px 0 0;
+    position: relative;
+}
+
+.updateFareHeader {
+    font-size: 18px;
+    font-weight: 500;
+    color: #202124;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #c0392b;
+}
+
+.modalCloseBtn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.modalBody {
+    padding: 24px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* Modal Buttons */
+.modalFooter {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 24px;
+    border-top: 1px solid #e0e0e0;
+    background: #ffffff;
+    border-radius: 0 0 8px 8px;
+    gap: 12px;
+}
+
+/* Button Styles */
+.button {
+    padding: 8px 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 100px;
+    height: 36px;
+    border: 1px solid transparent;
+    font-family: 'Roboto', Arial, sans-serif;
+    letter-spacing: 0.25px;
+}
+
+.primaryButton {
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.primaryButton:hover {
+    background-color: #1765cc;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.primaryButton:active {
+    background-color: #1557b0;
+}
+
+.secondaryButton {
+    background-color: #ffffff;
+    color: #1a73e8;
+    border: 1px solid #dadce0;
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.secondaryButton:hover {
+    background-color: #f8f9fa;
+    border-color: #d2e3fc;
+}
+
+.secondaryButton:active {
+    background-color: #f1f3f4;
+}
+
+/* Close Button */
+.closeButton {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #5f6368;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.closeButton:hover {
+    background-color: #f1f3f4;
+}
+
+/* Button Focus States */
+.button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.3);
+}
+
+/* Disabled State */
+.button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| MODAL SECTIONS & FORM GRIDS
+|--------------------------------------------------------------------------
+*/
+
+.modalSection {
+    margin-bottom: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.modalSectionHeader {
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-bottom: 1px solid #e0e0e0;
+    font-weight: 600;
+    color: #495057;
+    font-size: 14px;
+}
+
+/* Form Grid Layouts */
+.formGrid,
+.formGridSmall {
+    display: grid;
+    gap: 15px;
+    padding: 10px 15px 15px;
+    align-items: start;
+    transition: all 0.3s ease;
+}
+
+/* Corrected grid template: uses 1fr for equal distribution */
+.formGrid {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.formGridSmall {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Form Field Styling (Consolidated) */
+.formField {
+    display: flex;
+    flex-direction: column;
+    align-self: start;
+    width: 100%;
+    margin-bottom: 0;
+    position: relative;
+}
+
+.formField label {
+    margin-bottom: 4px;
+    font-weight: 500;
+    font-size: 13px;
+    color: #555;
+    white-space: nowrap;
+}
+
+.formField input,
+.formField select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    height: 36px;
+    box-sizing: border-box;
+}
+
+.formField input[disabled] {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Button Container Positioning */
+
+.grossTotalField,
+.grandTotalField,
+.buttonContainer {
+    position: relative;
+    height: 100%;
+    min-height: 80px;
+    display: flex;
+
+    box-sizing: border-box;
+}
+
+.pnrNoField {
+    grid-column: 2 / 3;
+}
+
+.formGrid .grossTotalField,
+.formGrid .grandTotalField,
+.formGrid .buttonContainer {
+    grid-column: 5 / 6;
+}
+
+.formGridSmall .buttonContainer {
+    grid-column: 4 / 5;
+}
+
+/* Form Button Styling */
+
+.actionBtn {
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: white;
+    transition: all 0.2s;
+    height: 36px;
+    min-width: 120px;
+    text-align: center;
+    bottom: -20px;
+    position: relative;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.actionBtn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* Specific Button Colors */
+.addSeatBtn {
+    background-color: #f0ad4e;
+}
+
+.minusSeatBtn {
+    background-color: #d9534f;
+}
+
+.addMoreBtn {
+    background-color: #5cb85c;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RESPONSIVE DESIGN
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 1024px) {
+
+    .btnPrimary,
+    .btnSecondary,
+    .btnSearch {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .pnrFilters select,
+    .pnrFilters input {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.85rem;
+    }
+
+    .pnrTable {
+        min-width: 1000px;
+    }
+}
+
+@media (max-width: 992px) {
+    .pnrFilters {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+    }
+
+    .btnSearch {
+        grid-column: 1 / -1;
+    }
+
+    .pnrTable {
+        min-width: 800px;
+    }
+}
+
+@media (max-width: 768px) {
+    .pnrContainer {
+        padding: 1rem;
+    }
+
+    .pnrHeader {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .pnrHeaderButtons {
+        width: 100%;
+    }
+
+    .pnrFilters {
+        grid-template-columns: 1fr;
+    }
+
+    .pnrTable {
+        font-size: 0.8rem;
+    }
+
+    .pnrTable th,
+    .pnrTable td {
+        padding: 0.7rem 0.5rem;
+    }
+
+
+    .formGridSmall {
+        grid-template-columns: 1fr 1fr !important;
+    }
+
+    /* Reset grid-column spans for mobile */
+    .pnrNoField,
+    .grossTotalField,
+    .grandTotalField,
+    .formGrid .buttonContainer,
+    .formGridSmall .buttonContainer {
+        grid-column: auto;
+    }
+
+    /* Ensure buttons still push to the bottom of their container */
+    .buttonContainer {
+        padding-top: 0;
+    }
+
+    .filterGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    position: relative;
+}
+}
+
+@media (max-width: 576px) {
+    .pnrHeaderButtons {
+        flex-direction: column;
+    }
+
+    .pnrTable {
+        font-size: 0.75rem;
+    }
+
+    .pnrTable th,
+    .pnrTable td {
+        padding: 0.5rem 0.3rem;
+    }
+
+    /* Form Grid Layout for Mobile */
+    .formGrid,
+    .formGridSmall {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .formField {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+    /* Group related fields in rows of two on mobile */
+    .formFieldGroup {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .formFieldGroup .formField {
+        flex: 1 1 calc(50% - 6px);
+        min-width: 120px;
+    }
+
+    .buttonContainer {
+        position: static;
+        min-height: auto;
+        margin: 10px 0 0;
+        width: 100%;
+    }
+
+    .actionBtn {
+        width: 100%;
+        margin: 10px 0 0;
+    }
+
+    .modal {
+        max-height: 90vh;
+        width: 95%;
+    }
+
+    .modalBody {
+        padding: 12px;
+        overflow-y: auto;
+    }
+
+    .modalFooter {
+        padding: 12px;
+    }
+
+    .formField input,
+    .formField select {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Adjust modal section spacing */
+    .modalSection {
+        margin-bottom: 15px;
+    }
+
+    .modalSectionHeader {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    /* Make sure the form fields don't get too small */
+    input[type="text"],
+    input[type="number"],
+    select {
+        min-width: 100%;
+    }
+
+    .actionBtn {
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        color: white;
+        transition: all 0.2s;
+        height: 36px;
+        min-width: 120px;
+        text-align: center;
+        bottom: 0;
+        position: relative;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* --- UPDATE FARE MODAL SPECIFIC STYLES --- */
+
+/* Ensures the modal is wider to fit the 5-column layout */
+.updateFareModal {
+    max-width: 800px;
+    padding: 20px;
+    width: 95%;
+}
+
+.updateFareHeader {
+    color: #ff0000;
+    /* Red color for the header text */
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.fareSection {
+    margin-bottom: 20px;
+}
+
+/* Grid for the top row (PNR, Fare Slab, Seat Left, Seat Sold) */
+.fareGridTop {
+    display: grid;
+    grid-template-columns: 2fr 2fr 1fr 1fr;
+    /* Custom widths to match the image */
+    gap: 10px;
+    align-items: end;
+    margin-top: 10px;
+    /* Align items to the bottom */
+}
+
+/* Grid for the existing fare row */
+.fareGridExisting {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Red alert message box */
+.fareAlert {
+    color: #ff0000;
+    font-weight: bold;
+    text-align: left;
+    padding: 5px 0;
+    grid-column: 5 / 5;
+    /* This attempts to place the alert next to the PNR row, but a simple div might be easier for this specific layout */
+}
+
+/* Horizontal Divider (Red line in the image) */
+.fareDivider {
+    border: 0;
+    border-top: 2px solid #ff0000;
+    margin: 15px 0;
+}
+
+/* Grid for the main bottom fare update section (5 columns) */
+.fareGridBottom {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    /* 5 equal columns */
+    gap: 10px;
+}
+
+.fareGridBottom label {
+    font-weight: bold;
+    /* Labels for basic, yq, yr, etc. */
+}
+
+.fareGridBottomHeader {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 10px;
+}
+
+.fareGridBottomHeader label {
+    font-weight: bold;
+}
+
+/* General field styling for better appearance */
+.fareSection .formField {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    /* Add some space between label and input */
+}
+
+.fareSection .formField label {
+    text-align: left;
+    /* Align labels to the left */
+    font-weight: normal;
+    /* Use normal font weight for labels */
+}
+
+.fareSection .formField input[type="text"],
+.fareSection .formField input[type="number"],
+.fareSection .formField select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    /* Include padding/border in element's total width */
+    text-align: center;
+    /* Center text in all input boxes */
+}
+
+/* Styling for the disabled, read-only fields */
+.fareSection .formField input:disabled {
+    background-color: #eee;
+    color: #333;
+}
+
+/* --- RESPONSIVE STYLES FOR UPDATE FARE MODAL --- */
+
+/* For tablets and smaller devices */
+@media (max-width: 768px) {
+    .modalOverlay {
+        padding: 10px;
+        align-items: flex-start;
+        padding-top: 40px;
+    }
+    
+    .modal,
+    .updateFareModal {
+        max-width: 100%;
+        width: 100%;
+        max-height: calc(100vh - 60px);
+        margin: 0;
+    }
+    
+    .modalHeader {
+        padding: 12px 16px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: white;
+    }
+    
+    .modalBody {
+        padding: 16px;
+    }
+    
+    .fareGridTop,
+    .fareGridExisting,
+    .fareGridBottom {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .fareGridBottomHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .fareAlert {
+        grid-column: 1 / -1;
+        text-align: center;
+        margin-top: 10px;
+    }
+    
+    .updateFareHeader {
+        font-size: 1.3em;
+    }
+}
+
+/* For mobile phones */
+@media (max-width: 480px) {
+    .modalOverlay {
+        padding: 5px;
+        align-items: flex-start;
+        padding-top: 60px;
+    }
+    
+    .modal,
+    .updateFareModal {
+        max-width: 100%;
+        width: 98%;
+        max-height: 80%;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .fareGridTop,
+    .fareGridExisting,
+    .fareGridBottom {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .modalHeader {
+        padding: 10px 12px;
+    }
+    
+    .modalBody {
+        padding: 12px;
+    }
+
+    .updateFareHeader {
+        font-size: 1.1em;
+    }
+    
+    .fareGridBottomHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+    
+    .formField {
+        margin-bottom: 8px;
+    }
+    
+    .formField label {
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+    }
+    
+    .formField input,
+    .formField select {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+}
+
+.errorMessage {
+    color: #d32f2f;
+    background-color: #fde7e9;
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin: 10px 0;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.errorMessage::before {
+    content: "⚠️";
+}
+
+
+
+/* Remove focus outline from all elements */
+
+    /* For mobile phones */
+    @media (max-width: 480px) {
+
+        .fareGridTop,
+        .fareGridExisting,
+        .fareGridBottom {
+            grid-template-columns: 1fr;
+            /* Switch to a single-column layout */
+        }
+
+        .updateFareHeader {
+            font-size: 1.2em;
+            /* Reduce header size on small screens */
+        }
+    }
+
+    .errorMessage {
+        color: #d32f2f;
+        background-color: #fde7e9;
+        padding: 8px 16px;
+        border-radius: 4px;
+        margin: 10px 0;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .errorMessage::before {
+        content: "⚠️";
+    }
+
+    /* Remove focus outline from all elements */
+    *:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+

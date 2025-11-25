@@ -1,0 +1,129 @@
+/* Navbar container */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 10%;
+  background-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Logo */
+.navbar-logo h1 {
+  cursor: pointer;
+  font-size: 25px;
+  margin: 0;
+}
+
+.navbar-logo img {
+  width: 100px;
+  max-height: 50px;
+  object-fit: contain;
+}
+
+/* Logo loading state */
+.logo-loading {
+  width: 100px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #666;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+/* Menu (Desktop) */
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-menu li a {
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: #222;
+  transition: color 0.3s;
+}
+
+.navbar-menu li a:hover {
+  color: #ff6a00; /* palette orange */
+}
+
+/* Get Started button */
+.btn-started {
+  background-color: #2a5d4f;
+  color: #fff !important;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-started:hover {
+  background-color: #1e3e35;
+}
+
+/* Hamburger icon */
+.menu-toggle {
+  display: none;
+  cursor: pointer;
+  color: #222;
+  z-index: 1100;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
+
+  .navbar-menu {
+    position: fixed;
+    top: 0;
+    right: -100%; /* hidden by default */
+    height: 100%;
+    width: 250px;
+    background: #fff;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    transition: right 0.3s ease-in-out;
+    box-shadow: -2px 0 6px rgba(0,0,0,0.1);
+  }
+
+  .navbar-menu.active {
+    right: 0; /* slide in */
+  }
+
+  .navbar-menu li a {
+    font-size: 22px;
+  }
+}
+
+.navbar-user {
+  font-weight: 600;
+  color: #2a5d4f;
+}
+
+.navbar-balance {
+  font-weight: 600;
+  color: #ff6a00; /* orange palette */
+}
+
+.btn-started{
+  cursor: pointer;
+}

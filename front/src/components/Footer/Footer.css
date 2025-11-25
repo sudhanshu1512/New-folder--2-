@@ -1,0 +1,158 @@
+/* Add this to the top of your CSS file to import the font if you don't add it to index.html */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+/* --- Main Footer Styling --- */
+.footer-redesigned {
+  background-color: #1a1a1a; /* Dark background for a modern look */
+  color: #a9a9a9; /* Softer text color for readability */
+  padding: 4rem 2rem 1.5rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.footer-container-redesigned {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-main-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive grid */
+  gap: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.footer-column-redesigned {
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Column 1: Logo and Description --- */
+.about-column .footer-logo-redesigned {
+  width: 160px;
+  margin-top: -2rem;
+}
+
+.footer-description-redesigned {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  max-width: 300px; /* Slightly reduced width for better readability */
+  text-align: left;
+  margin: 0 auto; /* Center the description */
+  color: #e0e0e0; /* Slightly lighter color for better contrast */
+  padding: 10px 0; /* Add some vertical spacing */
+  font-weight: 300; /* Lighter font weight for better readability */
+  letter-spacing: 0.3px; /* Slightly increase letter spacing */
+}
+
+/* --- Columns 2, 3, 4: Headings and Links --- */
+.footer-heading-redesigned {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ffffff; /* White headings for contrast */
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+  letter-spacing: 1px;
+  
+}
+
+/* Underline effect for headings */
+.footer-heading-redesigned::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background-color: #377E20; /* Brand accent color */
+}
+
+.footer-links-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links-list li {
+  margin-bottom: 0.8rem;
+}
+
+.footer-links-list a {
+  color: #a9a9a9;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.footer-links-list a:hover {
+  color: #377E20; /* Highlight color on hover */
+  padding-left: 5px; /* Subtle indent on hover */
+}
+
+/* --- Social Icons --- */
+.social-icons-redesigned {
+  display: flex;
+  gap: 1rem; /* Horizontal alignment with space */
+}
+
+.social-icons-redesigned a {
+  color: #a9a9a9;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #444;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.social-icons-redesigned a:hover {
+  color: #ffffff;
+  background-color: #377E20;
+  border-color: #377E20;
+  transform: translateY(-3px); /* Lifts the icon on hover */
+}
+
+
+/* --- Footer Bottom --- */
+.footer-bottom-redesigned {
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid #333; /* Cleaner divider */
+  font-size: 0.85rem;
+  color: #777;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  .footer-main-content {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+  }
+
+  .footer-redesigned {
+    padding: 3rem 1.5rem 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-main-content {
+    grid-template-columns: 1fr; /* Stack columns on mobile */
+    text-align: center;
+  }
+
+  .about-column .footer-logo-redesigned {
+    margin: 0 auto 1rem; /* Center logo on mobile */
+  }
+
+  .footer-heading-redesigned::after {
+    left: 50%;
+    transform: translateX(-50%); /* Center the underline */
+  }
+  
+  .social-icons-redesigned {
+    justify-content: center; /* Center social icons */
+  }
+}

@@ -1,0 +1,578 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+body {
+    margin: 0;
+}
+
+.seriesFlightContainer,
+.resultsPage {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    min-height: 80vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* --- SECTOR SELECTION VIEW --- */
+.seriesFlightContainer {
+    background-color: #f8f9fa;
+    position: relative;
+    min-height: 100vh;
+}
+
+.backgroundSlider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50vh;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.backgroundSlide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.backgroundSlide.active {
+    opacity: 1;
+}
+
+.backgroundOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.7) 0%, rgba(155, 89, 182, 0.5) 100%);
+    z-index: 2;
+}
+
+.headerContent {
+    position: relative;
+    z-index: 3;
+    padding: 2rem;
+    margin-top: 6rem;
+    margin-bottom: 4rem;
+    text-align: center;
+}
+
+.headerContent h1 {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    margin: 0;
+}
+
+.contentArea {
+    width: 100%;
+    max-width: 1100px;
+    margin-top: -80px;
+    padding: 2rem;
+    position: relative;
+    z-index: 5;
+}
+
+.sectorSelectionCard {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.sectorSelectionCard h2 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 0.5rem 1.5rem;
+    background: linear-gradient(90deg, #2d3748, #4a5568);
+    color: white;
+    border-radius: 25px;
+    display: inline-block;
+    margin-bottom: 2rem;
+}
+
+.sectorGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.sectorButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    padding: 0.75rem 1.25rem;
+    border-radius: 25px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #4a5568;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.sectorButton:hover {
+    background: #10b981;
+    color: #fff;
+    border-color: #10b981;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+
+
+.gallery-container {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1rem;
+    background-color: #f9f9f9;
+    overflow: hidden;
+  }
+  
+  .gallery-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  
+  .gallery-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background-color: #2a5d4f;
+  }
+  
+  .gallery-row {
+    width: 100%;
+    overflow: hidden;
+    padding: 20px 0;
+    position: relative;
+  }
+  
+  /* Specific margins */
+  .row-left {
+  
+  margin-left: 25px;
+  }
+  
+  .row-right {
+    
+    margin-left: -25px;
+  }
+  
+  .scrolling-track {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    animation-play-state: running;
+  }
+  
+  .gallery-item {
+    flex: 0 0 300px;
+    height: 220px;
+    overflow: hidden;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  .gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Enlarge on hover */
+  .gallery-item:hover img {
+    transform: scale(1.1);
+  }
+  
+  /* Animation scrolls */
+  .left-scroll {
+    animation: scrollLeft 80s linear infinite;
+  }
+  
+  .right-scroll {
+    animation: scrollRight 80s linear infinite;
+  }
+  
+  /* Pause on hover */
+  .row-left:hover .left-scroll,
+  .row-right:hover .right-scroll {
+    animation-play-state: paused;
+  }
+  
+  @keyframes scrollLeft {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  
+  @keyframes scrollRight {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .gallery-item {
+      flex: 0 0 220px;
+      height: 160px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .gallery-item {
+      flex: 0 0 160px;
+      height: 120px;
+    }
+  }
+  
+  
+/* ===== Responsive Design ===== */
+
+/* Large devices (desktops, 992px and up) */
+@media (max-width: 1200px) {
+    .contentArea {
+      max-width: 900px;
+      padding: 1.5rem;
+    }
+    
+    .headerContent h1 {
+      font-size: 2.2rem;
+    }
+    
+    .flightCard {
+      grid-template-columns: 100px 1fr 1fr 1fr auto;
+      gap: 1rem;
+      padding: 1.25rem;
+    }
+    
+    .airlineInfo img {
+      width: 80px;
+    }
+    
+    .timeLocation strong {
+      font-size: 1.5rem;
+    }
+    
+    .flightPrice strong {
+      font-size: 1.5rem;
+    }
+  }
+  
+  /* Medium devices (tablets, 768px and up) */
+  @media (max-width: 992px) {
+    .headerContent {
+      margin-top: 4rem;
+      margin-bottom: 2rem;
+    }
+    
+    .headerContent h1 {
+      font-size: 2rem;
+    }
+    
+    .sectorSelectionCard {
+      padding: 1.5rem;
+    }
+    
+    .flightCard {
+      grid-template-columns: 90px 1fr 1fr auto;
+      grid-template-areas:
+        "airline from to price"
+        "airline duration duration book";
+    }
+    
+    .airlineInfo {
+      grid-area: airline;
+    }
+    
+    .flightFrom {
+      grid-area: from;
+    }
+    
+    .flightTo {
+      grid-area: to;
+    }
+    
+    .flightDuration {
+      grid-area: duration;
+      text-align: left;
+      margin: 0.5rem 0;
+    }
+    
+    .flightPrice {
+      grid-area: price;
+      text-align: right;
+    }
+    
+    .bookButton {
+      grid-area: book;
+      justify-self: end;
+      align-self: end;
+    }
+    
+    .filterBar {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .dateInput {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+  }
+  
+  /* Small devices (landscape phones, 576px and up) */
+  @media (max-width: 768px) {
+    .headerContent {
+      padding: 1rem;
+      margin-top: 3rem;
+    }
+    
+    .headerContent h1 {
+      font-size: 1.75rem;
+    }
+    
+    .contentArea {
+      margin-top: -40px;
+      padding: 1rem;
+    }
+    
+    .sectorSelectionCard {
+      padding: 1.25rem;
+    }
+    
+    .sectorButton {
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .flightCard {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "airline from"
+        "airline to"
+        "duration duration"
+        "price book";
+      gap: 0.75rem;
+      padding: 1rem;
+    }
+    
+    .timeLocation strong {
+      font-size: 1.3rem;
+    }
+    
+    .flightPrice {
+      align-self: center;
+    }
+    
+    .bookButton {
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .gallery-title {
+      font-size: 2rem;
+    }
+  }
+  
+  /* Extra small devices (portrait phones, less than 576px) */
+  @media (max-width: 576px) {
+    .headerContent h1 {
+      font-size: 1.5rem;
+    }
+
+    .line-2way{
+      min-width: 0px;
+    }
+    
+    .sectorSelectionCard h2 {
+      font-size: 1rem;
+      padding: 0.4rem 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .sectorGrid {
+      gap: 0.5rem;
+    }
+    
+    .sectorButton {
+      padding: 0.5rem 0.8rem;
+      font-size: 0.85rem;
+    }
+    
+    .flightCard {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "airline"
+        "from"
+        "to"
+        "duration"
+        "price"
+        "book";
+      text-align: center;
+    }
+    
+    .airlineInfo {
+      margin-bottom: 1rem;
+    }
+    
+    
+    .flightDetails {
+      margin: 0.5rem 0;
+    }
+    
+    .flightDuration {
+      text-align: center;
+      margin: 0.5rem 0;
+    }
+    
+    .flightPrice {
+      text-align: center;
+      margin: 0.5rem 0;
+    }
+    
+    .bookButton {
+      width: 100%;
+      margin-top: 0.5rem;
+      justify-self: center;
+    }
+    
+    .gallery-title {
+      font-size: 1.75rem;
+    }
+    
+    .gallery-item {
+      flex: 0 0 200px;
+      height: 150px;
+    }
+  }
+    
+  
+/* ===== Booking Modal Styles (with unique class names) ===== */
+.bookingModal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.bookingModal-content {
+  background-color: #fff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.bookingModal-header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+.bookingModal-routeCode {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+}
+.bookingModal-routeIcon {
+  text-align: center;
+  color: #d9534f;
+}
+.bookingModal-routeIcon svg {
+  font-size: 1.8rem;
+}
+.bookingModal-routeDate {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 0.25rem;
+}
+
+.bookingModal-passengerGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding: 1.5rem;
+}
+.bookingModal-formGroup label {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+.bookingModal-formGroup input {
+  width: 100%;
+  padding: 0.7rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 1rem;
+}
+.bookingModal-formGroup input:focus {
+    outline: none;
+    border-color: #ff8c00;
+    box-shadow: 0 0 0 2px rgba(255, 140, 0, 0.2);
+}
+
+.bookingModal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: #f9f9f9;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+.bookingModal-id {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #d9534f;
+  font-family: monospace;
+}
+.bookingModal-confirmButton {
+  background-color: #ff8c00;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.8rem 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+}
+.bookingModal-confirmButton:hover {
+  background-color: #e67e00;
+}  

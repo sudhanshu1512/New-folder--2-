@@ -1,0 +1,225 @@
+/* --- RESULTS VIEW --- */
+.resultsPage {
+    background-color: #ffffff;
+    min-height: 90vh;
+    width: 100%;
+}
+
+.resultsHeader {
+    width: 100%;
+    background: linear-gradient(180deg, #2a5d4f, #1e3e35);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.backButton {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.backButton:hover {
+    background: #f7fafc;
+    border-color: #cbd5e0;
+}
+
+.resultsHeader h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+}
+
+.resultsHeader .placeholder {
+    width: 40px;
+}
+
+/* To balance the back button */
+
+.resultsContainer {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.filterBar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.dateInput {
+    padding: 0.75rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.filterButton {
+    background: #2D3748;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.filterButton:hover {
+    background: #4A5568;
+}
+
+.flightCard {
+    display: grid;
+    grid-template-columns: 120px 1fr 1fr 1fr auto;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: #fff;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+    transition: all 0.2s ease-in-out;
+    border: 1px solid #e2e8f0;
+}
+
+.flightCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.airlineInfo {
+    text-align: center;
+}
+
+.airlineInfo img {
+    width: 100px;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 0.25rem;
+}
+
+
+.airlineInfo span {
+    font-size: 1rem;
+     color: #718096;
+}
+
+.flightDetails {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.timeLocation {
+    display: flex;
+    flex-direction: column;
+}
+
+.timeLocation strong {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.timeLocation span {
+    font-size: 0.8rem;
+    color: #4a5568;
+    margin-top: 0.25rem;
+}
+
+.flightDuration {
+    text-align: center;
+    color: #718096;
+    font-size: 0.9rem;
+    margin: 5px;
+    min-width: 60px;
+}
+
+.flightPrice strong {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #2d3748;
+}
+
+.flightPrice span {
+    font-size: 0.8rem;
+    color: #e53e3e;
+    display: block;
+}
+
+.bookButton {
+    background-color: #10b981;
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.bookButton:hover {
+    background-color: #059669;
+}
+
+.noFlights {
+    text-align: center;
+    padding: 4rem;
+    color: #718096;
+    font-size: 1.1rem;
+}
+
+.line-2way {
+    border: 1px solid #e2e8f0;
+    min-width: 100px;
+    height: 2px;
+}
+
+/* --- Loader Styles --- */
+.loaderContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    z-index: 9999;
+}
+
+.loader {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #2a5d4f; /* Theme color */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

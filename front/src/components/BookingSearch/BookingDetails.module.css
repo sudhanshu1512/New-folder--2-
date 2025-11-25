@@ -1,0 +1,715 @@
+/* frontend/src/components/BookingSearch/BookingSearch.module.css */
+
+/* --- GLOBAL CONTAINER --- */
+.container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 1.5rem 2rem;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #1f2937;
+    box-sizing: border-box;
+    background-color: #f8fafc;
+    min-height: 100vh;
+}
+
+/* --- SHARED HEADER STYLES --- */
+.pageHeader,
+.detailsHeader {
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #2a5d4f 0%, #1e3e35 100%);
+}
+
+.pageHeader {
+    background: linear-gradient(135deg, #2a5d4f 0%, #1e3e35 100%);
+    padding: 2rem 2.5rem;
+    border-radius: 16px;
+    color: white;
+    box-shadow: 0 4px 20px rgba(42, 93, 79, 0.15);
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.5px;
+    color: white;
+}
+
+.subtitle {
+    color: rgba(255, 253, 253, 0.85);
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+
+.statusBadge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.statusConfirmed {
+    background-color: #d1fae5;
+    color: #047857;
+}
+
+.statusCancelled {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+.statusPending {
+    background-color: #fef3c7;
+    color: #b45309;
+}
+
+
+/* --- BOOKING DETAILS PAGE STYLES --- */
+
+.detailsHeader {
+    margin-bottom: 1rem;
+}
+
+.backLink {
+    background: none;
+    border: none;
+    color: #fbfdff;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    padding: 0;
+    font-weight: 500;
+}
+
+.backLink:hover {
+    color: #a3a5a5;
+}
+
+.headerTitleRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.statusBadgeLarge {
+    padding: 0.5rem 1.5rem;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Grid Layout for Details Page */
+.detailsGrid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    /* 2:1 Ratio for Content vs Sidebar */
+    gap: 2rem;
+}
+
+.mainContent,
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Universal Card Style for Details */
+.detailsCard {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.cardHeader {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+    background-color: #fcfcfc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cardHeader h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.iconTeal {
+    color: #2a5d4f;
+}
+
+.iconGray {
+    color: #94a3b8;
+}
+
+.cabinClass {
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: #e0f2f1;
+    color: #00695c;
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+.paxCount {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Flight Route Visuals */
+.flightRouteContainer {
+    padding: 2rem;
+}
+
+.airlineBlock {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.airlineLogoPlaceholder {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #ff6a00, #ff9e40);
+    color: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.5rem;
+}
+
+.airlineNameLarge {
+    font-weight: 700;
+    color: #1f2937;
+    font-size: 1.1rem;
+}
+
+.flightNoLarge {
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.routeVisual {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.cityNode {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.cityNode:last-child {
+    align-items: flex-end;
+    text-align: right;
+}
+
+.timeLarge {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2a5d4f;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.cityCodeLarge {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #4b5563;
+}
+
+.dateSmall {
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.terminalInfo {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-top: 4px;
+    background: #f8fafc;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #e2e8f0;
+}
+
+.durationLine {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 2rem;
+    position: relative;
+    top: -10px;
+}
+
+.durationBadge {
+    font-size: 0.8rem;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dottedLine {
+    width: 100%;
+    border-top: 2px dashed #cbd5e1;
+    position: relative;
+}
+
+.planeIconMiddle {
+    color: #2a5d4f;
+    font-size: 3rem;
+    position: absolute;
+    top: 20px;
+    /* Adjust based on badge height */
+    background: transparent;
+    padding: 0 8px;
+}
+
+.airportNamesRow {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #64748b;
+    padding-top: 1rem;
+    border-top: 1px solid #f1f5f9;
+    margin-top: 1rem;
+}
+
+/* Pax & Contact Styles */
+.paxGrid {
+    padding: 1rem;
+    display: grid;
+    gap: 1rem;
+}
+
+.paxCard {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid #f1f5f9;
+    border-radius: 10px;
+    transition: background 0.2s;
+}
+
+.paxCard:hover {
+    background: #f8fafc;
+}
+
+.paxAvatar {
+    width: 40px;
+    height: 40px;
+    background: #e2e8f0;
+    color: #64748b;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.paxInfo {
+    flex: 1;
+}
+
+.paxName {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.paxType {
+    font-size: 0.8rem;
+    color: #64748b;
+    text-transform: capitalize;
+}
+
+.paxExtras {
+    display: flex;
+    gap: 10px;
+    color: #64748b;
+    font-size: 0.8rem;
+}
+
+.contactRow {
+    padding: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.contactItem {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.contactItem label {
+    display: block;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 2px;
+}
+
+.contactItem p {
+    margin: 0;
+    font-weight: 500;
+    color: #334155;
+}
+
+/* Sidebar Pricing Styles */
+.priceList {
+    padding: 1.5rem;
+}
+
+.priceRow {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    color: #4b5563;
+}
+
+.divider {
+    border-top: 1px dashed #e2e8f0;
+    margin: 1rem 0;
+}
+
+.totalPrice {
+    font-weight: 700;
+    color: #2a5d4f;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.paymentStatus {
+    background: #f0fdf4;
+    color: #166534;
+    text-align: center;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+/* Cancel Action */
+.actionCard {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.cancelBtnFull {
+    width: 100%;
+    padding: 1rem;
+    background: white;
+    border: 2px solid #ef4444;
+    color: #ef4444;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cancelBtnFull:hover {
+    background: #ef4444;
+    color: white;
+}
+
+.cancelNote {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.cancelledCard {
+    background: #fef2f2;
+    border-color: #fecaca;
+    padding: 1.5rem;
+}
+
+/* Responsive for Details Page */
+@media (max-width: 900px) {
+    .detailsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        order: -1;
+    }
+
+    /* Show price/status first on mobile? Or remove to keep at bottom */
+}
+
+@media (max-width: 600px) {
+    .headerTitleRow {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .statusBadgeLarge {
+        align-self: flex-start;
+    }
+
+    .routeVisual {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: flex-start;
+        position: relative;
+    }
+
+    .cityNode:last-child {
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .durationLine {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        padding: 0;
+        top: 0;
+        margin: 1rem 0;
+        border-left: 2px dashed #cbd5e1;
+        padding-left: 1rem;
+        border-top: none;
+    }
+
+    .dottedLine {
+        display: none;
+    }
+
+    .planeIconMiddle {
+        position: static;
+        margin-left: 50px;
+        margin-bottom: 15px;
+        transform: rotate(90deg);
+    }
+
+    .airportNamesRow {
+        display: none;
+    }
+}
+
+
+/* Add these media queries at the end of your BookingDetails.module.css */
+
+/* For tablets and smaller desktops */
+@media (max-width: 1024px) {
+  .container {
+    padding: 15px;
+  }
+  
+  .detailsGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .detailsCard {
+    padding: 15px;
+  }
+  
+  .flightRouteContainer {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .routeVisual {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .cityNode {
+    text-align: center;
+    padding: 10px;
+  }
+  
+  .pricingSummary {
+    position: static;
+    width: 100%;
+  }
+}
+
+/* For tablets */
+@media (max-width: 768px) {
+  .detailsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .headerTitleRow {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .passengerGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .priceRow {
+    font-size: 14px;
+  }
+  
+  .actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .actionBtn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .dottedLine{
+    display: none;
+  }
+  .planeIconMiddle{
+    top: 45px;
+  }
+  .durationBadge {
+    font-size: 0.8rem;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+}
+
+/* For mobile devices */
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+  
+  .detailsHeader h1 {
+    font-size: 1.5rem;
+  }
+  
+  .statusBadgeLarge {
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+  
+  .cardHeader {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .timeLarge {
+    font-size: 1.2rem;
+  }
+  
+  .cityCodeLarge {
+    font-size: 1rem;
+  }
+  
+  .paxCard {
+    padding: 10px;
+  }
+  
+  .priceRow {
+    padding: 6px 0;
+  }
+  
+  .totalPrice {
+    font-size: 1.1rem;
+  }
+  
+  .backLink {
+    font-size: 14px;
+  }
+}
+
+/* For very small devices */
+@media (max-width: 360px) {
+  .container {
+    padding: 8px;
+  }
+  
+  .detailsCard {
+    padding: 12px;
+  }
+  
+  .timeLarge {
+    font-size: 1.1rem;
+  }
+  
+  .cityCodeLarge {
+    font-size: 0.9rem;
+  }
+  
+  .paxName {
+    font-size: 1rem;
+  }
+  
+  .paxType {
+    font-size: 0.8rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  .container {
+    padding: 0;
+  }
+  
+  .detailsCard {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 20px;
+  }
+  
+  .actions, .backLink {
+    display: none;
+  }
+  
+  .detailsGrid {
+    display: block;
+  }
+  
+  .pricingSummary {
+    position: static;
+    width: 100%;
+    margin-top: 20px;
+  }
+}

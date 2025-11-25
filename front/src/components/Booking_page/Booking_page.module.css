@@ -1,0 +1,1166 @@
+/* === Main Layout === */
+.pageContainer {
+  width: 100%;
+  max-width: 1400px;
+  margin: 2rem auto;
+  font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  color: #333;
+}
+
+.mainContent {
+  display: flex;
+  gap: 30px;
+  margin-top: 2rem;
+}
+
+.leftPanel {
+  flex: 2.5;
+}
+
+.rightPanel {
+  flex: 1;
+}
+
+.centeredMessage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+  font-size: 1.2rem;
+  color: #555;
+  gap: 10px;
+}
+
+.timerContainer {
+  text-align: center;
+  padding: 10px;
+  background-color: #ffeeba;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+/* === Animations === */
+.animatedCard {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* === Common Elements (Cards & Buttons) === */
+.card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.cardHeader small {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 400;
+}
+
+.actionButton {
+  background-color: #f77f00;
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.actionButton:hover {
+  background-color: #d66c00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.backButton {
+  background-color: #e9ecef;
+  color: #333;
+}
+
+.backButton:hover {
+  background-color: #ced4da;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+/* === ProgressBar === */
+.progressBarContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #4a4a4a;
+  padding: 15px 50px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stepItem {
+  display: flex;
+  align-items: center;
+  color: #a0a0a0;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.stepItem.active {
+  color: #fff;
+}
+
+.stepCircle {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: #6e6e6e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 12px;
+  font-size: 1.1rem;
+  border: 2px solid #a0a0a0;
+  transition: all 0.3s ease;
+}
+
+.stepItem.active .stepCircle {
+  background-color: #fff;
+  color: #4a4a4a;
+  border-color: #fff;
+  transform: scale(1.1);
+}
+
+.stepCircle.completed {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: #fff;
+}
+
+.stepTitle {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.connectorLine {
+  flex-grow: 1;
+  height: 2px;
+  background-color: #6e6e6e;
+  margin: 0 20px;
+}
+
+/* === FareSummary === */
+.summaryContainer {
+  background-color: #fff;
+  font-size: 0.95rem;
+  position: sticky;
+  top: 20px;
+}
+
+.summaryHeader {
+  margin: 0 0 10px 0;
+  font-size: 1.3rem;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.passengerType {
+  color: #666;
+  margin-bottom: 15px;
+  background: #f8f9fa;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.fareSection {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.fareSection h4 {
+  margin: 0 0 10px 0;
+  font-weight: 600;
+  color: #333;
+}
+
+.fareRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.fareRow span:first-child {
+  color: #555;
+}
+
+.fareRow span:last-child {
+  font-weight: bold;
+}
+
+.grossTotal {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #d9534f;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px solid #ddd;
+}
+
+.grossTotal span {
+  color: #d9534f;
+}
+
+/* === FlightItinerary === */
+.flightCard {
+  background: #fff;
+  border: 1px solid #e0e6ed;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.flightHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.routeTitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flightDate {
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin: 4px 0 0 0;
+}
+
+.airlineSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.airlineLogo {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  border-radius: 8px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 4px rgba(255, 107, 53, 0.3);
+}
+
+.airlineInfo {
+  flex: 1;
+}
+
+.airlineName {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.flightNumber {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 2px 0 0 0;
+}
+
+.cabinClass {
+  background: #f3f4f6;
+  color: #374151;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.routeSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #f3f4f6;
+}
+
+.airport {
+  text-align: center;
+  flex: 1;
+}
+
+.airport .code {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.airport .time {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+}
+
+.airport .date {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.airport .terminal {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.duration {
+  flex: 1;
+  text-align: center;
+  padding: 0 20px;
+  position: relative;
+}
+
+.durationText {
+  font-size: 0.9rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.line {
+  width: 100%;
+  height: 2px;
+  background: #d1d5db;
+  position: relative;
+  margin: 8px 0;
+}
+
+.planeIcon {
+  color: #10b981;
+  font-size: 1rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #f9fafb;
+  padding: 0 8px;
+}
+
+.stops {
+  font-size: 0.8rem;
+  color: #10b981;
+  font-weight: 500;
+}
+
+.refundableBadge {
+  background: #d1fae5;
+  color: #065f46;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.flightFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.flightOptions {
+  display: flex;
+  gap: 16px;
+}
+
+.optionLink {
+  color: #6b7280;
+  font-size: 0.9rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.optionLink:hover {
+  color: #374151;
+}
+
+.itineraryActions {
+  margin-top: 25px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.addPassengerButton {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+.addPassengerButton:hover {
+  background-color: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* === PassengerDetails & Validation === */
+.travellerSection {
+  background: #fff;
+  border: 1px solid #e0e6ed;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.travellerHeader {
+  background: #dbeafe;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e0e6ed;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.travellerTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e40af;
+  margin: 0;
+}
+
+.govIdNote {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.passengerTypeSection {
+  padding: 16px 24px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.passengerTypeHeader {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 16px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.passengerCard {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.passengerCardHeader {
+  background: #f9fafb;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.passengerCardHeader:hover {
+  background: #f3f4f6;
+}
+
+.passengerInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.passengerCheckbox {
+  width: 20px;
+  height: 20px;
+  accent-color: #3b82f6;
+  transition: all 0.2s;
+}
+
+.passengerCheckbox.incomplete {
+  accent-color: #d1d5db;
+  opacity: 0.5;
+}
+
+.passengerCheckbox.complete {
+  accent-color: #10b981;
+}
+
+.passengerName {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.expandIcon {
+  color: #6b7280;
+  font-size: 1.2rem;
+  transition: transform 0.2s;
+}
+
+.expandIcon.expanded {
+  transform: rotate(180deg);
+}
+
+.passengerForm {
+  padding: 20px;
+  background: #fff;
+  border-top: 1px solid #e5e7eb;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputLabel {
+  font-size: 0.9rem;
+  color: #374151;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.inputGroup input,
+.inputGroup select {
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.2s;
+  background: #fff;
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus {
+  border-color: #3b82f6;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.inputError {
+  border-color: #ef4444 !important;
+}
+
+input::placeholder {
+  color: #9ca3af;
+}
+
+.errorMessage {
+  color: #ef4444;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.contactSection {
+  background: #fff;
+  border: 1px solid #e0e6ed;
+  border-radius: 12px;
+  padding: 24px;
+  margin-top: 24px;
+}
+
+.contactHeader {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.contactSubtext {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+
+.contactFormRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.contactInputGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.contactLabel {
+  font-size: 0.9rem;
+  color: #374151;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.contactInput {
+  padding: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s;
+  background: #f9fafb;
+}
+
+.contactInput:focus {
+  border-color: #3b82f6;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background: #fff;
+}
+
+.phoneInput {
+  position: relative;
+}
+
+.phonePrefix {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.phoneInput input {
+  padding-left: 50px;
+}
+
+/* === Additional Improvements === */
+
+.passengerCard:last-child {
+  margin-bottom: 0;
+}
+
+.passengerTypeSection:last-child {
+  border-bottom: none;
+}
+
+.formRow:last-child {
+  margin-bottom: 0;
+}
+
+/* === Responsive Design === */
+
+@media (max-width: 768px) {
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .contactFormRow {
+    grid-template-columns: 1fr;
+  }
+
+  .routeSection {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .duration {
+    order: -1;
+    padding: 0;
+  }
+
+  .flightHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .flightFooter {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .flightOptions {
+    justify-content: center;
+  }
+}
+
+/* === Review === */
+.reviewCard {
+  background: #fff;
+  border: 1px solid #e0e6ed;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.reviewHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 24px 0;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.reviewSection {
+  margin-bottom: 24px;
+  padding: 20px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #f3f4f6;
+}
+
+.reviewSection:last-of-type {
+  margin-bottom: 0;
+}
+
+.reviewSectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.flightSummary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.flightRoute {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.flightDate {
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.paxList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.paxItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 12px;
+  transition: all 0.2s;
+}
+
+.paxItem:last-child {
+  margin-bottom: 0;
+}
+
+.paxItem:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-color: #d1d5db;
+}
+
+.paxInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.paxName {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.paxDetails {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.paxDob {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.paxType {
+  background: #dbeafe;
+  color: #1e40af;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.contactInfo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #374151;
+}
+
+.contactLabel {
+  font-weight: 500;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.contactValue {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* === Payment === */
+.paymentCard {
+  background: #fff;
+  border: 1px solid #e0e6ed;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.paymentHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 24px 0;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.paymentMethods {
+  margin-bottom: 24px;
+}
+
+.paymentOption {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.paymentOption:hover {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.paymentOption.selected {
+  border-color: #3b82f6;
+  background: #eff6ff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.paymentRadio {
+  width: 20px;
+  height: 20px;
+  accent-color: #3b82f6;
+  margin-top: 2px;
+}
+
+.paymentContent {
+  flex: 1;
+}
+
+.paymentTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.paymentDescription {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.walletBalance {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #059669;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: #d1fae5;
+  padding: 8px 12px;
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.paymentSummary {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.summaryTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 16px 0;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  color: #6b7280;
+}
+
+.summaryRow:last-child {
+  margin-bottom: 0;
+  padding-top: 12px;
+  border-top: 1px solid #e5e7eb;
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 1.1rem;
+}
+
+.paymentIcon {
+  color: #3b82f6;
+}
+
+@media (max-width: 1024px) {
+  .pageContainer {
+    max-width: 100%;
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 508px) {
+  .progressBarContainer {
+    display: none;
+  }
+  .mainContent{
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* === Sexy Timeline Styles === */
+.timelineRouteSection {
+    display: flex;
+    gap: 16px;
+    padding: 24px 0;
+    width: 100%;
+}
+
+.timelineTimes {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1rem;
+    text-align: right;
+    flex-basis: 60px;
+}
+
+.timelineGraphic {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.timelineCircle {
+    width: 14px;
+    height: 14px;
+    background-color: #fff;
+    border: 3px solid #3498db;
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px #fff;
+}
+
+.timelineDashedLine {
+    flex-grow: 1;
+    width: 2px;
+    border-left: 2px dashed #bdc3c7;
+    margin: 6px 0;
+}
+
+.timelineDetails {
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
+.timelineAirportInfo {
+    font-size: 1rem;
+    color: #34495e;
+}
+
+.timelineAirportInfo strong {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.timelineDuration {
+    text-align: left;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.paymentOption.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+    border-color: #e0e0e0;
+}
+
+.walletInsufficient {
+    color: #f44336;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9em;
+    margin-top: 5px;
+}
+
+.insufficientBalance {
+    color: #f44336;
+    font-size: 0.9em;
+}
+
+.totalAmountDisplay{
+  margin-bottom: 20px;
+}

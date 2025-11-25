@@ -1,0 +1,367 @@
+/* ===== Base & Page Layout ===== */
+.ledgerReportContainer {
+  padding: 2rem;
+  background-color: #f8fafc;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.pageTitle {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ===== Search Form Card ===== */
+.searchCard {
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  margin-bottom: 2rem;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  align-items: flex-end;
+  /* Aligns items to the bottom */
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #475569;
+  margin-bottom: 0.5rem;
+}
+
+.formGroup select,
+.formGroup input {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.375rem;
+  font-size: 0.9375rem;
+}
+
+.formGroup select:focus,
+.formGroup input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+ 
+  /* ===== Buttons ===== */
+  .buttonCell {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+
+    justify-content: flex-start;
+  }
+  
+  .searchButton,
+  .exportButton {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .searchButton {
+    background: #ff6a00;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+ 
+  }
+  
+  .searchButton:hover {
+    background: #e85b00;
+  }
+  
+  .searchButton:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+  }
+  .exportButton {
+    background-color: #10b981;
+    color: white;
+
+  justify-content: flex-start;
+}
+
+.searchButton,
+.exportButton {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.searchButton {
+  background: #ff6a00;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+
+}
+
+.searchButton:hover {
+  background: #e85b00;
+}
+
+.searchButton:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.exportButton {
+  background-color: #10b981;
+  color: white;
+}
+
+.exportButton:hover {
+  background-color: #059669;
+}    
+  
+  /* Table */
+  .pnrtablecontainer {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .pnrtable {
+    width: 100%;
+    min-width: 900px; /* Ensures table doesn't shrink below this width */
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  
+  .pnrtable th {
+    background: #f1f3f5;
+    text-align: left;
+    padding: 10px;
+    color: #555;
+  }
+  
+  .pnrtable td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .pnrtable tr:hover {
+    background: #f9f9f9;
+  }
+  
+  .textblue {
+    color: #007bff;
+    cursor: pointer;
+  }
+  .textgreen {
+    color: #28a745;
+    cursor: pointer;
+  }
+  .textred {
+    color: #dc3545;
+    cursor: pointer;
+  }
+  
+  .norecords {
+    text-align: center;
+    color: red;
+    font-weight: 600;
+    padding: 20px;
+  }
+  
+  /* Loading and Error States */
+  .loadingState,
+  .errorState {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  
+  .spinnerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #ff6a00;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .errorContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .errorMessage {
+    color: #dc3545;
+    font-weight: 600;
+    font-size: 16px;
+  }
+  
+  .norecordfound {
+    text-align: center;
+    color: #dc3545;
+    font-weight: 600;
+    padding: 20px;
+  }
+  
+  /* Media Queries */
+  @media (max-width: 1200px) {
+    .pnrfilters {
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+    .btn-search {
+      grid-column: auto;
+      min-width: 100%;
+    }
+    
+  .ledgerReportContainer{
+    max-width: 800px;
+  }
+  }
+
+  @media (max-width: 992px) {
+    .pnr-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+    
+    .pnr-header-buttons {
+      width: 100%;
+      justify-content: space-between;
+    }
+    
+    .pnr-filters {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .pnr-container {
+      padding: 15px 10px;
+    }
+    
+    .pnr-header h1 {
+      font-size: 20px;
+    }
+    
+    .btn-primary,
+    .btn-secondary,
+    .btn-search {
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+    
+    .pnr-filters {
+      padding: 15px;
+      gap: 12px;
+    }
+    
+    .pnr-filters select,
+    .pnr-filters input {
+      padding: 7px 10px;
+      font-size: 13px;
+    }
+    
+    .pnrtable th,
+    .pnrtable td {
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .pnr-filters {
+      grid-template-columns: 1fr;
+    }
+    
+    .pnr-header-buttons {
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .btn-primary,
+    .btn-secondary,
+    .btn-search {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .pnrtable th,
+    .pnrtable td {
+      padding: 6px 8px;
+      font-size: 12px;
+    }
+    
+    .text-blue,
+    .text-green,
+    .text-red {
+      font-size: 12px;
+    }
+  }
+
+  /* For very small devices */
+  @media (max-width: 400px) {
+    .pnr-container {
+      padding: 10px 5px;
+    }
+    
+    .pnr-header h1 {
+      font-size: 18px;
+    }
+    
+    .pnr-table-container {
+      padding: 10px 5px;
+    }
+    
+    .pnrtable th,
+    .pnrtable td {
+      padding: 5px;
+      font-size: 11px;
+    }
+  }
+  

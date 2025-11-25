@@ -1,0 +1,342 @@
+/* ===== Base & Page Layout ===== */
+.ticketReportContainer {
+    padding: 2rem;
+    background-color: #f8fafc;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+  
+  .pageTitle {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .pageTitle .icon {
+    color: #3b82f6;
+  }
+  
+  /* ===== Search Form Card ===== */
+  .searchCard {
+    background-color: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1.75rem 2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    margin-bottom: 2rem;
+  }
+  
+  /* --- KEY FIX 1: Explicit 4-Column Grid --- */
+  .formGrid {
+    display: grid;
+    /* Start with 4 columns on large screens */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem 1.25rem;
+  }
+  
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .formGroup label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #475569;
+    margin-bottom: 0.5rem;
+  }
+  
+  .formGroup select,
+  .formGroup input {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 0.9375rem;
+    transition: all 0.2s ease;
+  }
+  
+  .formGroup select:focus,
+  .formGroup input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  }
+  
+  
+  /* ===== Status Badges & Utility Classes ===== */
+  .statusBadge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    display: inline-block;
+    min-width: 90px;
+  }
+  
+  /* Your JSX uses statusConfirmed, not statusConfirmed */
+  .statusConfirmed {
+    background-color: #dcfce7;
+    color: #166534;
+  }
+  .statusCancelled {
+    background-color: #fee2e2;
+    color: #991b1b;
+  }
+  .statusPending {
+    background-color: #fef9c3;
+    color: #854d0e;
+  }
+  
+  .currency {
+    font-family: 'Roboto Mono', monospace;
+    text-align: right;
+  }
+  .total {
+    font-weight: 700;
+  }
+  
+  .loadingCell,
+  .noRecordFound {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #64748b;
+    font-style: italic;
+  }
+  
+  
+  /* ===== Buttons ===== */
+  .buttonGroup {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    justify-content: flex-start;
+  }
+  
+  .searchButton,
+  .exportButton {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .searchButton {
+    background: #ff6a00;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+ 
+  }
+  
+  .searchButton:hover {
+    background: #e85b00;
+  }
+  
+  .searchButton:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+  }
+  .exportButton {
+    background-color: #10b981;
+    color: white;
+  }
+  .exportButton:hover {
+    background-color: #059669;
+  }
+  
+  /* ===== Responsive Design for Form Grid ===== */
+  /* On medium screens (e.g., tablets), switch to 2 columns */
+  @media (max-width: 1024px) {
+    .formGrid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  /* On small screens (e.g., mobile), switch to 1 column */
+  @media (max-width: 640px) {
+    .formGrid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+
+
+
+
+/* Table Container */
+.resultsCard {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  max-width: 350%;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+  display: block;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Table Styling */
+.resultsTable {
+  width: 350%;
+  border-collapse: collapse;
+  font-size: 14px;
+  table-layout: fixed;
+  white-space: nowrap;
+}
+
+.resultsTable th {
+  background: #f1f3f5;
+  text-align: left;
+  padding: 12px 15px;
+  color: #2d3748;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  vertical-align: middle;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+    
+  .resultsTable td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #edf2f7;
+  vertical-align: middle;
+  color: #4a5568;
+  font-size: 1rem;
+}
+
+/* Add horizontal spacing between columns */
+.resultsTable th:not(:last-child),
+.resultsTable td:not(:last-child) {
+  padding-right: 20px;
+}
+
+/* Hover effect for better row visibility */
+.resultsTable tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+
+  /* Hover effect is now defined above with more specific selector */
+    
+  .text-blue {
+    color: #007bff;
+    cursor: pointer;
+  }
+  .text-green {
+    color: #28a745;
+    cursor: pointer;
+  }
+  .text-red {
+    color: #dc3545;
+    cursor: pointer;
+  }
+    
+  .no-records {
+    text-align: center;
+    color: red;
+    font-weight: 600;
+    padding: 20px;
+  }
+  
+  
+    
+  /* Media Queries */
+  @media (max-width: 1200px) {
+    .resultsCard {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      display: block;
+    }
+
+    .resultsTable {
+      width: 350%;
+      min-width: 600%;
+    }
+    
+    .btn-search {
+      grid-column: auto;
+      min-width: 100%;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    .formGrid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  /* On small screens (e.g., mobile), switch to 1 column */
+  @media (max-width: 640px) {
+    .formGrid {
+      grid-template-columns: 1fr;
+    }
+
+    .resultsTable {
+      width: 350%;
+      min-width: 1300%;
+    }
+  }
+  
+
+    
+  /* ===== Status Badges & Utility Classes ===== */
+  .statusBadge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    display: inline-block;
+    min-width: 90px;
+  }
+  
+  /* Your JSX uses statusConfirmed, not statusConfirmed */
+  .statusConfirmed {
+    background-color: #dcfce7;
+    color: #166534;
+  }
+  .statusCancelled {
+    background-color: #fee2e2;
+    color: #991b1b;
+  }
+  .statusPending {
+    background-color: #fef9c3;
+    color: #854d0e;
+  }
+  
+  .currency {
+    font-family: 'Roboto Mono', monospace;
+    text-align: left;
+   
+  }
+  .total {
+    font-weight: 700;
+  }
+  
+  .loadingCell,
+  .noRecordFound {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #64748b;
+    font-style: italic;
+  }
+  
+
+  

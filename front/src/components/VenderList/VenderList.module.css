@@ -1,0 +1,247 @@
+/* ===== Base & Page Layout ===== */
+.venderListContainer {
+  padding: 2rem;
+  max-width: 1250px;
+  background-color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.addButton {
+  background-color: #0d6efd;
+  /* Blue */
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.addButton:hover {
+  background-color: #0b5ed7;
+}
+
+/* ===== Add Vender Form ===== */
+.addVenderFormCard {
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #475569;
+  margin-bottom: 0.5rem;
+}
+
+.formGroup label span {
+  color: #ef4444;
+  /* Red asterisk */
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.375rem;
+  font-size: 0.9rem;
+}
+
+.buttonGroup {
+  grid-column: 3 / 5;
+  /* Span from the third column to the end */
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.submitButton,
+.clearButton {
+  flex-grow: 1;
+  /* Make buttons take equal space */
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: 0.375rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.submitButton {
+  background: #ff6a00;
+  color: white;
+}
+
+.submitButton:hover {
+  background: #e85b00;
+}
+
+.clearButton {
+  background-color: #10b981;
+  color: #1e293b;
+}
+
+.clearButton:hover {
+  background-color: #059669;
+}
+
+
+/* ===== Results Table ===== */
+.resultsCard {
+  background-color: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  overflow-x: auto;
+}
+
+.resultsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.resultsTable th,
+.resultsTable td {
+  padding: 0.8rem 1rem;
+  font-size: 0.875rem;
+  color: #334155;
+  border-bottom: 1px solid #f1f5f9;
+  white-space: nowrap;
+}
+
+.resultsTable thead {
+  background-color: #f1f5f9;
+}
+
+.resultsTable th {
+  font-weight: 600;
+  color: #475569;
+}
+
+.resultsTable tr:hover {
+  background: #f9f9f9;
+}
+
+.noRecordsFound {
+  text-align: center;
+  padding: 2rem;
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.updateCell {
+  text-align: center;
+}
+
+.updateIcon {
+  color: #0d6efd;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.updateIcon:hover {
+  transform: scale(1.2);
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 1024px) {
+  .formGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .buttonGroup {
+    grid-column: 1 / 3;
+  }
+
+  .venderListContainer {
+    max-width: 800px;
+  }
+}
+
+@media (max-width: 640px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .buttonGroup {
+    grid-column: 1 / 2;
+  }
+}
+
+/* Add these styles to your existing CSS */
+.errorInput {
+  border-color: #ff4444 !important;
+}
+
+.errorText {
+  color: #ff4444;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.required {
+  color: #ff4444;
+  margin-left: 0.25rem;
+}
+
+.loading {
+  padding: 1rem;
+  text-align: center;
+  color: #666;
+}
+
+.editButton {
+  background: none;
+  border: none;
+  color: #3498db;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.editButton:hover {
+  color: #2980b9;
+}

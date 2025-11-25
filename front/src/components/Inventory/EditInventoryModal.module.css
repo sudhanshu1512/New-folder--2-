@@ -1,0 +1,245 @@
+.modalOverlay {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.closeButton {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #6c757d;
+    z-index: 1001;
+    padding: 0.5rem;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.closeButton:hover {
+    color: #dc3545;
+}
+
+.modalContent {
+    background-color: #f4f7fa;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 900px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modalHeader h2 {
+    font-size: 1.5rem;
+    color: #333;
+    font-weight: 600;
+}
+
+.backButton {
+    background-color: #f0ad4e;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+}
+
+.backButton:hover {
+    background-color: #ec971f;
+}
+
+.formSection {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.sectionHeader {
+    background-color: #337ab7;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.sectionHeader h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.formGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.formGroup label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+.formGroup input,
+.formGroup select {
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: #f8f9fa;
+}
+
+.formGroup input[readonly] {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+.tripTypeGroup {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.tripTypeGroup label {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: normal;
+}
+
+.formActions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.saveButton {
+    background-color: #f0ad4e;
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.saveButton:hover {
+    background-color: #ec971f;
+}
+
+/* --- Validation Styling --- */
+.errorInput {
+    border: 1px solid #dc3545 !important; /* Red border for error */
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.errorMessage {
+    color: #dc3545; /* Red text for error message */
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
+/* --- General Styling Refinements --- */
+
+/* Use a professional, deep blue for primary actions and headers */
+.sectionHeader {
+    background-color: #007bff; /* Primary Blue */
+    color: white;
+    padding: 0.75rem 1.5rem;
+    margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+/* Make buttons look more modern and accessible */
+.backButton {
+    background-color: #6c757d; /* Grey/Secondary color for back button */
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+    font-weight: 500;
+}
+
+.backButton:hover {
+    background-color: #5a6268;
+}
+
+.saveButton {
+    background-color: #28a745; /* Green for Save/Success */
+    color: white;
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600; /* Bolder text */
+    transition: background-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.saveButton:hover {
+    background-color: #218838;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Ensure radio buttons look consistent */
+.tripTypeGroup {
+    border: 1px solid #ced4da; /* Lighter border */
+    background-color: #ffffff;
+}
+
+.tripTypeGroup label input[type="radio"] {
+    margin-right: 0.5rem;
+    /* Optional: custom radio styling if needed */
+}
