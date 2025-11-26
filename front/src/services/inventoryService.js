@@ -1,4 +1,4 @@
-
+import api from '../lib/api'
 // Define your API base URL here (e.g., where your Express server is running)
 const API_BASE_URL = api; 
 
