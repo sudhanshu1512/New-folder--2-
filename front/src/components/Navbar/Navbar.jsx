@@ -64,9 +64,8 @@ const Navbar = () => {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      const data = await response.json();
-      if (data.success) {
-        setBalance(data.balance);
+      if (response.data && response.data.success) {
+        setBalance(response.data.balance);
       }
     } catch (error) {
       console.error('Error fetching balance:', error);
