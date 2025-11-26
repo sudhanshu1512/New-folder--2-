@@ -1,7 +1,6 @@
-// ../../services/inventoryService.js
 
 // Define your API base URL here (e.g., where your Express server is running)
-const API_BASE_URL = 'http://localhost:5000/api'; 
+const API_BASE_URL = api; 
 
 // Helper function to get the auth token from localStorage
 const getAuthToken = () => {

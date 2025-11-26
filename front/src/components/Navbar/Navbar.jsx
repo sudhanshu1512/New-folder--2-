@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./Navbar.css";
+import api from "../../lib/api";
 import { Link, useNavigate } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
@@ -58,7 +59,7 @@ const Navbar = () => {
  useEffect(() => {
   const fetchBalance = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/balance', {
+      const response = await api.get('auth/balance', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
