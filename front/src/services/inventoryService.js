@@ -1,6 +1,6 @@
-
+import api from '../lib/api'
 // Define your API base URL here (e.g., where your Express server is running)
-const API_BASE_URL = api; 
+const API_BASE_URL = 'https://books-vm03.onrender.com/api'; 
 
 // Helper function to get the auth token from localStorage
 const getAuthToken = () => {
