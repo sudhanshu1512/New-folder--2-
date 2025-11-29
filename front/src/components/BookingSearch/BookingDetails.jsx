@@ -3,21 +3,53 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../lib/api';
 import styles from './BookingDetails.module.css';
 import {
-    FaPlane, FaUser, FaCalendarAlt, FaSpinner,
+    FaPlane, FaUser, FaCalendarAlt, FaSpinner, FaTicketAlt,
     FaExclamationCircle, FaArrowLeft, FaPhoneAlt, FaEnvelope,
-    FaClock, FaSuitcase, FaCheckCircle
+    FaClock, FaSuitcase, FaCheckCircle, FaPaperPlane // <--- Added FaPaperPlane
 } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
+
+// Import the HTML Generator we just created
+import { generateTicketHTML } from './TicketPage';
 
 const BookingDetails = () => {
     const { bookingId } = useParams();
     const navigate = useNavigate();
-
     const [booking, setBooking] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [isCancelling, setIsCancelling] = useState(false);
 
+
+    // ... existing state ...
+    const [isSendingEmail, setIsSendingEmail] = useState(false); // <--- Add this state
+
+    // ... existing handleDownloadTicket ...
+
+    // --- NEW: Handle Send Ticket Email ---
+    const handleSendTicket = async () => {
+        if (!booking) return;
+        setIsSendingEmail(true);
+        const toastId = toast.loading('Sending ticket via email...');
+
+        try {
+            // Adjust the URL based on your backend route structure
+            const response = await api.post(`/bookings/booking/${booking.bookingId}/sendtkt`);
+
+            if (response.data.success) {
+                toast.success('Ticket sent successfully!', { id: toastId });
+            } else {
+                toast.error(response.data.message || 'Failed to send ticket', { id: toastId });
+            }
+        } catch (err) {
+            console.error(err);
+            toast.error(err.response?.data?.message || 'Error sending ticket', { id: toastId });
+        } finally {
+            setIsSendingEmail(false);
+        }
+    };
+
+    // Fetch Booking Details
     useEffect(() => {
         const fetchBookingDetails = async () => {
             if (!bookingId) return;
@@ -38,6 +70,87 @@ const BookingDetails = () => {
         fetchBookingDetails();
     }, [bookingId]);
 
+    // Add this state
+    const [isDownloading, setIsDownloading] = useState(false);
+
+    // Handle ticket download with new tab and print button
+    const handleDownloadTicket = () => {
+        if (!booking) return;
+
+        setIsDownloading(true);
+        const toastId = toast.loading('Opening ticket...');
+
+        try {
+            const htmlContent = generateTicketHTML(booking);
+            const newTab = window.open('', '_blank');
+
+            if (newTab) {
+                newTab.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>E-Ticket - ${booking.bookingId}</title>
+                        <style>
+                            body { 
+                                font-family: Arial, sans-serif; 
+                                padding: 20px;
+                                max-width: 1200px;
+                                margin: 0 auto;
+                            }
+                            .print-button {
+                                display: block;
+                                margin: 20px auto;
+                                padding: 10px 20px;
+                                background: #0f766e;
+                                color: white;
+                                border: none;
+                                border-radius: 4px;
+                                cursor: pointer;
+                                font-size: 16px;
+                                transition: background 0.2s;
+                            }
+                            .print-button:hover {
+                                background: #0e6b64;
+                            }
+                            @media print {
+                                .print-button { display: none; }
+                                body { padding: 0; }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        ${htmlContent}
+                        <button class="print-button" onclick="window.print()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: middle;">
+                                <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                                <rect x="6" y="14" width="12" height="8"></rect>
+                            </svg>
+                            Print Ticket
+                        </button>
+                        <script>
+                            // Optional: Uncomment to close after print
+                            // window.onafterprint = function() {
+                            //     window.close();
+                            // };
+                        </script>
+                    </body>
+                    </html>
+                `);
+                newTab.document.close();
+                toast.dismiss(toastId);
+            } else {
+                toast.error('Pop-up blocked. Please allow pop-ups for this site.', { id: toastId });
+            }
+        } catch (err) {
+            console.error('Error generating ticket:', err);
+            toast.error('Failed to generate ticket', { id: toastId });
+        } finally {
+            setIsDownloading(false);
+        }
+    };
+
+    // Handle Cancellation
     const handleCancelBooking = async () => {
         if (!window.confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) return;
 
@@ -63,17 +176,12 @@ const BookingDetails = () => {
         }
     };
 
+    // Helper: Format Date
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
         return new Date(dateString).toLocaleDateString('en-IN', {
-            weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+            weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour24: true
         });
-    };
-
-    const formatTime = (timeString) => {
-        if (!timeString) return '';
-        // Assumes timeString is "HH:mm" or similar
-        return timeString;
     };
 
     if (loading) return (
@@ -127,16 +235,15 @@ const BookingDetails = () => {
                         </div>
 
                         <div className={styles.flightRouteContainer}>
-                            {/* Airline Info */}
                             <div className={styles.airlineBlock}>
                                 <div className={styles.airlineLogoPlaceholder}>{booking.flight.airline.charAt(0)}</div>
                                 <div>
                                     <div className={styles.airlineNameLarge}>{booking.flight.airline}</div>
-                                    <div className={styles.flightNoLarge}>{booking.flight.flightNo}</div>
+                                    <div className={styles.flightNoLarge}>{booking.flight.airlinecode} - {booking.flight.flightNo}</div>
+                                    <div className={styles.flightNoLarge}>{booking.pnr}</div>
                                 </div>
                             </div>
 
-                            {/* Route Visual */}
                             <div className={styles.routeVisual}>
                                 <div className={styles.cityNode}>
                                     <span className={styles.timeLarge}>{booking.flight.departureTime}</span>
@@ -219,6 +326,49 @@ const BookingDetails = () => {
 
                 {/* Right Column: Pricing & Actions */}
                 <div className={styles.sidebar}>
+                    {/* DOWNLOAD TICKET BUTTON */}
+                    {booking.status === 'CONFIRMED' && (
+                        <div className={styles.buttonRow}>
+                            {/* Download Button */}
+                            <button
+                                onClick={handleDownloadTicket}
+                                disabled={isDownloading}
+                                className={styles.halfBtn}
+                            >
+                                {isDownloading ? (
+                                    <>
+                                        <FaSpinner className={styles.spinner} />
+                                        <span>Processing...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <FaTicketAlt />
+                                        <span>Download</span>
+                                    </>
+                                )}
+                            </button>
+
+                            {/* Send Email Button */}
+                            <button
+                                onClick={handleSendTicket}
+                                disabled={isSendingEmail}
+                                className={`${styles.halfBtn} ${styles.emailBtn}`}
+                            >
+                                {isSendingEmail ? (
+                                    <>
+                                        <FaSpinner className={styles.spinner} />
+                                        <span>Sending...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <FaPaperPlane />
+                                        <span>Email Ticket</span>
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    )}
+
                     <div className={styles.detailsCard}>
                         <div className={styles.cardHeader}>
                             <h3>Fare Summary</h3>

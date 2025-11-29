@@ -40,7 +40,7 @@ const Inventory = () => {
     to: [],
     supplier: []
   });
-
+  const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [selectedRecord, setSelectedRecord] = useState(null);
   const [viewModalOpen, setViewModalOpen] = useState(false);
@@ -101,6 +101,24 @@ const Inventory = () => {
       height: '40px',
     }),
   };
+
+      useEffect(() => {
+      const checkPermission = async () => {
+        try {
+          const response = await api.get('/agent/profile');
+  
+          if (!response.data.isSupplier) {
+            toast.error("Access Denied: You must be a Supplier to view this page.");
+            navigate('/flight-search'); // Redirect immediately
+          }
+        } catch (error) {
+          console.error("Error checking permissions", error);
+          // Optional: Redirect on error too, depending on security strictness
+        }
+      };
+  
+      checkPermission();
+    }, [navigate]);
 
   useEffect(() => {
     const loadSuppliers = async () => {
@@ -374,8 +392,6 @@ const Inventory = () => {
       fetchFlightDetails(selectedRecord).catch(() => { });
     }
   }, [viewModalOpen, selectedRecord]);
-
-  const navigate = useNavigate();
 
   // Dynamically calculate Grand Total for the Update Fare modal
   const dynamicGrandTotal = useMemo(() => {

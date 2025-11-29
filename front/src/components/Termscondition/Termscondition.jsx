@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaGavel, FaPlane, FaUserCheck, FaCreditCard, FaBan, FaSyncAlt } from 'react-icons/fa';
-import './termscondition.css';
+import './Termscondition.css';
 
 const Termsconditions = () => {
     return (

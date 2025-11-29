@@ -29,10 +29,9 @@
     margin-bottom: 2rem;
   }
   
-  /* --- KEY FIX 1: Explicit 4-Column Grid --- */
+  /* Explicit 4-Column Grid */
   .formGrid {
     display: grid;
-    /* Start with 4 columns on large screens */
     grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem 1.25rem;
   }
@@ -66,7 +65,235 @@
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
   }
   
+  /* ===== Buttons ===== */
+  .buttonGroup {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e2e8f0;
+    justify-content: flex-start;
+  }
   
+  .searchButton,
+  .exportButton {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .searchButton {
+    background: #ff6a00;
+    color: white;
+  }
+  
+  .searchButton:hover {
+    background: #e85b00;
+  }
+  
+  .searchButton:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+  }
+  
+  .exportButton {
+    background-color: #10b981;
+    color: white;
+  }
+  
+  .exportButton:hover {
+    background-color: #059669;
+  }
+  
+  /* ===== Table Styles ===== */
+  .resultsCard {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    /* Ensure container handles overflow */
+    width: 100%; 
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+  }
+  
+  .resultsTable {
+    width: 100%;
+    min-width: max-content; /* Ensures table doesn't squash columns */
+    border-collapse: collapse;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  
+  .resultsTable th {
+    background: #f1f3f5;
+    /* FIX: Changed from left to center */
+    text-align: center; 
+    padding: 12px 15px;
+    color: #2d3748;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    vertical-align: middle;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  .resultsTable td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #edf2f7;
+    vertical-align: middle;
+    color: #4a5568;
+    font-size: 0.95rem;
+    /* FIX: Added center alignment */
+    text-align: center;
+  }
+  
+  /* Remove right padding on last child to balance center alignment */
+  .resultsTable th:not(:last-child),
+  .resultsTable td:not(:last-child) {
+    border-right: 1px solid transparent; /* Optional separator */
+  }
+  
+  .resultsTable tbody tr:hover {
+    background-color: #f8fafc;
+  }
+  
+  /* ===== Status Badges ===== */
+  .statusBadge {
+    padding: 0.35rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    display: inline-block;
+    min-width: 90px;
+  }
+  
+  .statusConfirmed {
+    background-color: #dcfce7;
+    color: #166534;
+  }
+  .statusCancelled {
+    background-color: #fee2e2;
+    color: #991b1b;
+  }
+  .statusPending, .statusOnHold { /* Added OnHold class support */
+    background-color: #fef9c3;
+    color: #854d0e;
+  }
+  
+  /* ===== Specific Columns ===== */
+  .currency {
+    font-family: 'Roboto Mono', monospace;
+    /* FIX: Changed from left to center */
+    text-align: center;
+  }
+  
+  .total {
+    font-weight: 700;
+  }
+  
+  .loadingCell,
+  .noRecordFound {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #64748b;
+    font-style: italic;
+  }
+  
+  /* ===== Responsive Media Queries ===== */
+  @media (max-width: 1024px) {
+    .formGrid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .formGrid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ... (Existing Layout Styles) ... */
+
+/* ===== Status Badges ===== */
+.statusBadge {
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: capitalize;
+  text-align: center;
+  display: inline-block;
+  min-width: 90px;
+  letter-spacing: 0.5px;
+}
+
+/* Green for Confirmed */
+.statusConfirmed {
+  background-color: #d1fae5; /* Tailwind Green-100 */
+  color: #065f46;            /* Tailwind Green-800 */
+  border: 1px solid #a7f3d0;
+}
+
+/* Red for Cancelled */
+.statusCancelled {
+  background-color: #fee2e2; /* Tailwind Red-100 */
+  color: #991b1b;            /* Tailwind Red-800 */
+  border: 1px solid #fecaca;
+}
+
+/* Yellow/Orange for On Hold or Pending */
+.statusOnHold,
+.statusPending {
+  background-color: #fef3c7; /* Tailwind Amber-100 */
+  color: #92400e;            /* Tailwind Amber-800 */
+  border: 1px solid #fde68a;
+}
+
+/* Default Grey */
+.statusDefault {
+  background-color: #f3f4f6;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+}
+
+/* ... (Rest of your Table Styles) ... */
+.resultsTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.resultsTable th {
+  text-align: center; /* Centered Headers */
+  padding: 12px;
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.resultsTable td {
+  text-align: center; /* Centered Data */
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #334151;
+}
+
+.currency {
+  text-align: center;
+  font-family: monospace;
+}
+
+
   /* ===== Status Badges & Utility Classes ===== */
   .statusBadge {
     padding: 0.35rem 0.75rem;
@@ -107,236 +334,3 @@
     color: #64748b;
     font-style: italic;
   }
-  
-  
-  /* ===== Buttons ===== */
-  .buttonGroup {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #e2e8f0;
-    justify-content: flex-start;
-  }
-  
-  .searchButton,
-  .exportButton {
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 0.5rem;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  .searchButton {
-    background: #ff6a00;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
- 
-  }
-  
-  .searchButton:hover {
-    background: #e85b00;
-  }
-  
-  .searchButton:disabled {
-    background-color: #94a3b8;
-    cursor: not-allowed;
-  }
-  .exportButton {
-    background-color: #10b981;
-    color: white;
-  }
-  .exportButton:hover {
-    background-color: #059669;
-  }
-  
-  /* ===== Responsive Design for Form Grid ===== */
-  /* On medium screens (e.g., tablets), switch to 2 columns */
-  @media (max-width: 1024px) {
-    .formGrid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  
-  /* On small screens (e.g., mobile), switch to 1 column */
-  @media (max-width: 640px) {
-    .formGrid {
-      grid-template-columns: 1fr;
-    }
-  }
-  
-
-
-
-
-/* Table Container */
-.resultsCard {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  max-width: 350%;
-  overflow-x: scroll;
-  -webkit-overflow-scrolling: touch;
-  display: block;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-/* Table Styling */
-.resultsTable {
-  width: 350%;
-  border-collapse: collapse;
-  font-size: 14px;
-  table-layout: fixed;
-  white-space: nowrap;
-}
-
-.resultsTable th {
-  background: #f1f3f5;
-  text-align: left;
-  padding: 12px 15px;
-  color: #2d3748;
-  font-weight: 600;
-  text-transform: uppercase;
-  font-size: 1rem;
-  letter-spacing: 2px;
-  vertical-align: middle;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-    
-  .resultsTable td {
-  padding: 12px 15px;
-  border-bottom: 1px solid #edf2f7;
-  vertical-align: middle;
-  color: #4a5568;
-  font-size: 1rem;
-}
-
-/* Add horizontal spacing between columns */
-.resultsTable th:not(:last-child),
-.resultsTable td:not(:last-child) {
-  padding-right: 20px;
-}
-
-/* Hover effect for better row visibility */
-.resultsTable tbody tr:hover {
-  background-color: #f8fafc;
-}
-
-
-  /* Hover effect is now defined above with more specific selector */
-    
-  .text-blue {
-    color: #007bff;
-    cursor: pointer;
-  }
-  .text-green {
-    color: #28a745;
-    cursor: pointer;
-  }
-  .text-red {
-    color: #dc3545;
-    cursor: pointer;
-  }
-    
-  .no-records {
-    text-align: center;
-    color: red;
-    font-weight: 600;
-    padding: 20px;
-  }
-  
-  
-    
-  /* Media Queries */
-  @media (max-width: 1200px) {
-    .resultsCard {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      display: block;
-    }
-
-    .resultsTable {
-      width: 350%;
-      min-width: 600%;
-    }
-    
-    .btn-search {
-      grid-column: auto;
-      min-width: 100%;
-    }
-  }
-
-  @media (max-width: 1024px) {
-    .formGrid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  
-  /* On small screens (e.g., mobile), switch to 1 column */
-  @media (max-width: 640px) {
-    .formGrid {
-      grid-template-columns: 1fr;
-    }
-
-    .resultsTable {
-      width: 350%;
-      min-width: 1300%;
-    }
-  }
-  
-
-    
-  /* ===== Status Badges & Utility Classes ===== */
-  .statusBadge {
-    padding: 0.35rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-align: center;
-    display: inline-block;
-    min-width: 90px;
-  }
-  
-  /* Your JSX uses statusConfirmed, not statusConfirmed */
-  .statusConfirmed {
-    background-color: #dcfce7;
-    color: #166534;
-  }
-  .statusCancelled {
-    background-color: #fee2e2;
-    color: #991b1b;
-  }
-  .statusPending {
-    background-color: #fef9c3;
-    color: #854d0e;
-  }
-  
-  .currency {
-    font-family: 'Roboto Mono', monospace;
-    text-align: left;
-   
-  }
-  .total {
-    font-weight: 700;
-  }
-  
-  .loadingCell,
-  .noRecordFound {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: #64748b;
-    font-style: italic;
-  }
-  
-
-  

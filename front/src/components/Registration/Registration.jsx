@@ -108,33 +108,6 @@ const Toast = ({ message, type = 'success', onClose, duration = 5000, position =
           right: 20px;
         }
 
-        .toast-container.top-left {
-          top: 20px;
-          left: 20px;
-        }
-
-        .toast-container.bottom-right {
-          bottom: 20px;
-          right: 20px;
-        }
-
-        .toast-container.bottom-left {
-          bottom: 20px;
-          left: 20px;
-        }
-
-        .toast-container.top-center {
-          top: 20px;
-          left: 50%;
-          transform: translateX(-50%);
-        }
-
-        .toast-container.bottom-center {
-          bottom: 20px;
-          left: 50%;
-          transform: translateX(-50%);
-        }
-
         /* Toast Base Styles */
         .toast {
           min-width: 300px;
@@ -269,101 +242,41 @@ const Toast = ({ message, type = 'success', onClose, duration = 5000, position =
         .toast-success {
           border-left-color: #10b981;
         }
-
-        .toast-success .toast-icon {
-          color: #10b981;
-        }
-
-        .toast-success .toast-title {
-          color: #047857;
-        }
-
-        .toast-success .toast-progress-bar {
-          background-color: #10b981;
-        }
+        .toast-success .toast-icon { color: #10b981; }
+        .toast-success .toast-title { color: #047857; }
+        .toast-success .toast-progress-bar { background-color: #10b981; }
 
         .toast-error {
           border-left-color: #ef4444;
         }
-
-        .toast-error .toast-icon {
-          color: #ef4444;
-        }
-
-        .toast-error .toast-title {
-          color: #dc2626;
-        }
-
-        .toast-error .toast-progress-bar {
-          background-color: #ef4444;
-        }
+        .toast-error .toast-icon { color: #ef4444; }
+        .toast-error .toast-title { color: #dc2626; }
+        .toast-error .toast-progress-bar { background-color: #ef4444; }
 
         .toast-warning {
           border-left-color: #f59e0b;
         }
-
-        .toast-warning .toast-icon {
-          color: #f59e0b;
-        }
-
-        .toast-warning .toast-title {
-          color: #d97706;
-        }
-
-        .toast-warning .toast-progress-bar {
-          background-color: #f59e0b;
-        }
+        .toast-warning .toast-icon { color: #f59e0b; }
+        .toast-warning .toast-title { color: #d97706; }
+        .toast-warning .toast-progress-bar { background-color: #f59e0b; }
 
         .toast-info {
           border-left-color: #3b82f6;
         }
-
-        .toast-info .toast-icon {
-          color: #3b82f6;
-        }
-
-        .toast-info .toast-title {
-          color: #2563eb;
-        }
-
-        .toast-info .toast-progress-bar {
-          background-color: #3b82f6;
-        }
+        .toast-info .toast-icon { color: #3b82f6; }
+        .toast-info .toast-title { color: #2563eb; }
+        .toast-info .toast-progress-bar { background-color: #3b82f6; }
 
         /* Mobile Responsive */
         @media (max-width: 480px) {
           .toast-container {
             left: 10px !important;
             right: 10px !important;
-            transform: none !important;
           }
-          
           .toast {
             min-width: auto;
             max-width: none;
             width: 100%;
-          }
-          
-          @keyframes toastSlideIn {
-            from {
-              transform: translateY(-100%);
-              opacity: 0;
-            }
-            to {
-              transform: translateY(0);
-              opacity: 1;
-            }
-          }
-          
-          @keyframes toastSlideOut {
-            from {
-              transform: translateY(0);
-              opacity: 1;
-            }
-            to {
-              transform: translateY(-100%);
-              opacity: 0;
-            }
           }
         }
 
@@ -371,24 +284,6 @@ const Toast = ({ message, type = 'success', onClose, duration = 5000, position =
         .toast:hover {
           transform: translateY(-2px);
           box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-          transition: all 0.2s ease;
-        }
-
-        .toast:hover .toast-progress-bar {
-          animation-play-state: paused;
-        }
-
-        /* Dark Theme Support */
-        @media (prefers-color-scheme: dark) {
-          .toast {
-            background: #1f2937;
-            color: #f9fafb;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-          }
-          
-          .toast-close:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-          }
         }
       `}</style>
         </>
@@ -396,22 +291,18 @@ const Toast = ({ message, type = 'success', onClose, duration = 5000, position =
 };
 
 const uploadToCloudinary = async (file) => {
-    // Validate file type
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
     if (!allowedTypes.includes(file.type.toLowerCase())) {
         throw new Error('Only JPG, JPEG, and PNG files are allowed');
     }
 
-    // 2. Validate file size (5MB limit)
     const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
     if (file.size > maxSizeInBytes) {
         throw new Error('File size should not exceed 5MB');
     }
 
-    //1 Get the signature from our own backend
     let signatureResponse;
     try {
-        // Use your api instance or a standard fetch
         signatureResponse = await api.get('/cloudinary/sign-upload');
     } catch (error) {
         console.error("Failed to get upload signature:", error);
@@ -425,13 +316,10 @@ const uploadToCloudinary = async (file) => {
     formData.append('api_key', apiKey);
     formData.append('timestamp', timestamp);
     formData.append('signature', signature);
-    // Optional: specify a folder if you signed it on the backend
-    // formData.append('folder', 'user_documents');
 
-    const cloudName = 'deean6nsu'; // Replace with your Cloudinary cloud name
+    const cloudName = 'deean6nsu'; 
     const url = `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`;
 
-    // 2. Upload the file directly to Cloudinary using the signature
     try {
         const response = await fetch(url, {
             method: 'POST',
@@ -441,10 +329,10 @@ const uploadToCloudinary = async (file) => {
             throw new Error('Cloudinary upload failed');
         }
         const data = await response.json();
-        return data.secure_url; // Return the secure URL
+        return data.secure_url; 
     } catch (error) {
         console.error("Error uploading to Cloudinary:", error);
-        throw error; // Re-throw error to be caught by handleSubmit
+        throw error; 
     }
 };
 
@@ -605,7 +493,6 @@ export default function Registration() {
             return;
         }
 
-        // Basic format validation
         const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
         if (!panRegex.test(panNumber.toUpperCase())) {
             setPanValidation({
@@ -656,7 +543,6 @@ export default function Registration() {
                 showToast(data.message, 'warning', 4000);
             }
         } catch (error) {
-            console.error('Error checking PAN:', error);
             const errorMessage = error.response?.data?.message || 'Error checking PAN availability';
             setPanValidation({
                 isChecking: false,
@@ -668,198 +554,100 @@ export default function Registration() {
         }
     }, []);
 
-    // Mobile validation function with API call
+    // Mobile validation function
     const checkMobileAvailability = useCallback(async (mobile) => {
         if (!mobile || mobile.length !== 10) {
-            setMobileValidation({
-                isChecking: false,
-                isValid: null,
-                message: '',
-                exists: false
-            });
+            setMobileValidation({ isChecking: false, isValid: null, message: '', exists: false });
             return;
         }
-
         const mobileRegex = /^[0-9]{10}$/;
         if (!mobileRegex.test(mobile)) {
-            setMobileValidation({
-                isChecking: false,
-                isValid: false,
-                message: 'Invalid mobile format',
-                exists: false
-            });
+            setMobileValidation({ isChecking: false, isValid: false, message: 'Invalid mobile format', exists: false });
             return;
         }
-
         setMobileValidation(prev => ({ ...prev, isChecking: true }));
 
         try {
-            const response = await api.post('/auth/check-mobile', {
-                mobile: mobile
-            });
-
+            const response = await api.post('/auth/check-mobile', { mobile: mobile });
             const data = response.data;
-
             if (data.success) {
-                setMobileValidation({
-                    isChecking: false,
-                    isValid: true,
-                    message: data.message,
-                    exists: false
-                });
+                setMobileValidation({ isChecking: false, isValid: true, message: data.message, exists: false });
                 showToast('Mobile number available', 'success', 3000);
             } else if (data.exists) {
-                setMobileValidation({
-                    isChecking: false,
-                    isValid: false,
-                    message: data.message,
-                    exists: true
-                });
-                setErrors(prev => ({
-                    ...prev,
-                    mobile: data.message
-                }));
+                setMobileValidation({ isChecking: false, isValid: false, message: data.message, exists: true });
+                setErrors(prev => ({ ...prev, mobile: data.message }));
                 showToast(data.message, 'error', 6000);
             } else {
-                setMobileValidation({
-                    isChecking: false,
-                    isValid: false,
-                    message: data.message,
-                    exists: false
-                });
+                setMobileValidation({ isChecking: false, isValid: false, message: data.message, exists: false });
                 showToast(data.message, 'warning', 4000);
             }
         } catch (error) {
-            console.error('Error checking mobile:', error);
             const errorMessage = error.response?.data?.message || 'Error checking mobile availability';
-            setMobileValidation({
-                isChecking: false,
-                isValid: false,
-                message: errorMessage,
-                exists: false
-            });
+            setMobileValidation({ isChecking: false, isValid: false, message: errorMessage, exists: false });
             showToast(errorMessage, 'error', 5000);
         }
     }, []);
 
-    // Email validation function with API call
+    // Email validation function
     const checkEmailAvailability = useCallback(async (email) => {
         if (!email) {
-            setEmailValidation({
-                isChecking: false,
-                isValid: null,
-                message: '',
-                exists: false
-            });
+            setEmailValidation({ isChecking: false, isValid: null, message: '', exists: false });
             return;
         }
-
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
-            setEmailValidation({
-                isChecking: false,
-                isValid: false,
-                message: 'Invalid email format',
-                exists: false
-            });
+            setEmailValidation({ isChecking: false, isValid: false, message: 'Invalid email format', exists: false });
             return;
         }
-
         setEmailValidation(prev => ({ ...prev, isChecking: true }));
 
         try {
-            const response = await api.post('/auth/check-email', {
-                email: email.toLowerCase()
-            });
-
+            const response = await api.post('/auth/check-email', { email: email.toLowerCase() });
             const data = response.data;
-
             if (data.success) {
-                setEmailValidation({
-                    isChecking: false,
-                    isValid: true,
-                    message: data.message,
-                    exists: false
-                });
+                setEmailValidation({ isChecking: false, isValid: true, message: data.message, exists: false });
                 showToast('Email address available', 'success', 3000);
             } else if (data.exists) {
-                setEmailValidation({
-                    isChecking: false,
-                    isValid: false,
-                    message: data.message,
-                    exists: true
-                });
-                setErrors(prev => ({
-                    ...prev,
-                    email: data.message
-                }));
+                setEmailValidation({ isChecking: false, isValid: false, message: data.message, exists: true });
+                setErrors(prev => ({ ...prev, email: data.message }));
                 showToast(data.message, 'error', 6000);
             } else {
-                setEmailValidation({
-                    isChecking: false,
-                    isValid: false,
-                    message: data.message,
-                    exists: false
-                });
+                setEmailValidation({ isChecking: false, isValid: false, message: data.message, exists: false });
                 showToast(data.message, 'warning', 4000);
             }
         } catch (error) {
-            console.error('Error checking email:', error);
             const errorMessage = error.response?.data?.message || 'Error checking email availability';
-            setEmailValidation({
-                isChecking: false,
-                isValid: false,
-                message: errorMessage,
-                exists: false
-            });
+            setEmailValidation({ isChecking: false, isValid: false, message: errorMessage, exists: false });
             showToast(errorMessage, 'error', 5000);
         }
     }, []);
 
     // Debounced validation functions
     const debouncedPanCheck = useCallback((panNumber) => {
-        if (panCheckTimeoutRef.current) {
-            clearTimeout(panCheckTimeoutRef.current);
-        }
-        panCheckTimeoutRef.current = setTimeout(() => {
-            checkPanAvailability(panNumber);
-        }, 800);
+        if (panCheckTimeoutRef.current) clearTimeout(panCheckTimeoutRef.current);
+        panCheckTimeoutRef.current = setTimeout(() => { checkPanAvailability(panNumber); }, 800);
     }, [checkPanAvailability]);
 
     const debouncedMobileCheck = useCallback((mobile) => {
-        if (mobileCheckTimeoutRef.current) {
-            clearTimeout(mobileCheckTimeoutRef.current);
-        }
-        mobileCheckTimeoutRef.current = setTimeout(() => {
-            checkMobileAvailability(mobile);
-        }, 800);
+        if (mobileCheckTimeoutRef.current) clearTimeout(mobileCheckTimeoutRef.current);
+        mobileCheckTimeoutRef.current = setTimeout(() => { checkMobileAvailability(mobile); }, 800);
     }, [checkMobileAvailability]);
 
     const debouncedEmailCheck = useCallback((email) => {
-        if (emailCheckTimeoutRef.current) {
-            clearTimeout(emailCheckTimeoutRef.current);
-        }
-        emailCheckTimeoutRef.current = setTimeout(() => {
-            checkEmailAvailability(email);
-        }, 800);
+        if (emailCheckTimeoutRef.current) clearTimeout(emailCheckTimeoutRef.current);
+        emailCheckTimeoutRef.current = setTimeout(() => { checkEmailAvailability(email); }, 800);
     }, [checkEmailAvailability]);
 
-    // Cleanup timeout on unmount
     useEffect(() => {
         return () => {
-            if (panCheckTimeoutRef.current) {
-                clearTimeout(panCheckTimeoutRef.current);
-            }
-            if (mobileCheckTimeoutRef.current) {
-                clearTimeout(mobileCheckTimeoutRef.current);
-            }
-            if (emailCheckTimeoutRef.current) {
-                clearTimeout(emailCheckTimeoutRef.current);
-            }
+            if (panCheckTimeoutRef.current) clearTimeout(panCheckTimeoutRef.current);
+            if (mobileCheckTimeoutRef.current) clearTimeout(mobileCheckTimeoutRef.current);
+            if (emailCheckTimeoutRef.current) clearTimeout(emailCheckTimeoutRef.current);
         };
     }, []);
 
-    const validateStep = (currentStep) => {
+    // Modified to trigger toast for sync errors
+    const validateStep = (currentStep, triggerToast = false) => {
         const newErrors = {};
         let isValid = true;
         let fieldsToValidate = [];
@@ -880,50 +668,39 @@ export default function Registration() {
             }
         });
 
-        // Additional checks for step 2
         if (currentStep === 2) {
             if (formData.mobile) {
-                if (mobileValidation.isChecking) {
-                    newErrors.mobile = 'Checking mobile availability...';
-                    isValid = false;
-                } else if (mobileValidation.exists) {
-                    newErrors.mobile = mobileValidation.message;
-                    isValid = false;
-                } else if (mobileValidation.isValid === false && !mobileValidation.exists) {
-                    newErrors.mobile = mobileValidation.message;
-                    isValid = false;
-                }
+                if (mobileValidation.isChecking) { newErrors.mobile = 'Checking mobile availability...'; isValid = false; }
+                else if (mobileValidation.exists) { newErrors.mobile = mobileValidation.message; isValid = false; }
+                else if (mobileValidation.isValid === false && !mobileValidation.exists) { newErrors.mobile = mobileValidation.message; isValid = false; }
             }
-
             if (formData.email) {
-                if (emailValidation.isChecking) {
-                    newErrors.email = 'Checking email availability...';
-                    isValid = false;
-                } else if (emailValidation.exists) {
-                    newErrors.email = emailValidation.message;
-                    isValid = false;
-                } else if (emailValidation.isValid === false && !emailValidation.exists) {
-                    newErrors.email = emailValidation.message;
-                    isValid = false;
-                }
+                if (emailValidation.isChecking) { newErrors.email = 'Checking email availability...'; isValid = false; }
+                else if (emailValidation.exists) { newErrors.email = emailValidation.message; isValid = false; }
+                else if (emailValidation.isValid === false && !emailValidation.exists) { newErrors.email = emailValidation.message; isValid = false; }
             }
         }
 
-        // Additional check for PAN number in step 3
         if (currentStep === 3 && formData.panNumber) {
-            if (panValidation.isChecking) {
-                newErrors.panNumber = 'Checking PAN availability...';
-                isValid = false;
-            } else if (panValidation.exists) {
-                newErrors.panNumber = panValidation.message;
-                isValid = false;
-            } else if (panValidation.isValid === false && !panValidation.exists) {
-                newErrors.panNumber = panValidation.message;
-                isValid = false;
-            }
+            if (panValidation.isChecking) { newErrors.panNumber = 'Checking PAN availability...'; isValid = false; }
+            else if (panValidation.exists) { newErrors.panNumber = panValidation.message; isValid = false; }
+            else if (panValidation.isValid === false && !panValidation.exists) { newErrors.panNumber = panValidation.message; isValid = false; }
         }
 
         setErrors(newErrors);
+
+        // TRIGGER TOAST IF ERRORS EXIST
+        if (!isValid && triggerToast) {
+            // Get the first error message to show to the user
+            const firstErrorField = Object.keys(newErrors)[0];
+            const errorMessage = newErrors[firstErrorField];
+            if (errorMessage) {
+                showToast(`${errorMessage} (${firstErrorField})`, 'error', 4000);
+            } else {
+                showToast('Please check the highlighted fields', 'error', 4000);
+            }
+        }
+
         return isValid;
     };
 
@@ -931,93 +708,45 @@ export default function Registration() {
         const { name, value, type, files } = e.target;
         const newValue = type === "file" ? files[0] : value;
 
-        setFormData(prev => ({
-            ...prev,
-            [name]: newValue
-        }));
+        setFormData(prev => ({ ...prev, [name]: newValue }));
 
-        // Special handling for PAN number
         if (name === 'panNumber' && type !== "file") {
-            setPanValidation({
-                isChecking: false,
-                isValid: null,
-                message: '',
-                exists: false
-            });
-
-            setErrors(prev => ({
-                ...prev,
-                panNumber: undefined
-            }));
-
-            if (newValue && newValue.length >= 10) {
-                debouncedPanCheck(newValue);
-            }
+            setPanValidation({ isChecking: false, isValid: null, message: '', exists: false });
+            setErrors(prev => ({ ...prev, panNumber: undefined }));
+            if (newValue && newValue.length >= 10) debouncedPanCheck(newValue);
         }
 
-        // Special handling for Mobile number
         if (name === 'mobile' && type !== "file") {
-            setMobileValidation({
-                isChecking: false,
-                isValid: null,
-                message: '',
-                exists: false
-            });
-
-            setErrors(prev => ({
-                ...prev,
-                mobile: undefined
-            }));
-
-            if (newValue && newValue.length === 10) {
-                debouncedMobileCheck(newValue);
-            }
+            setMobileValidation({ isChecking: false, isValid: null, message: '', exists: false });
+            setErrors(prev => ({ ...prev, mobile: undefined }));
+            if (newValue && newValue.length === 10) debouncedMobileCheck(newValue);
         }
 
-        // Special handling for Email
         if (name === 'email' && type !== "file") {
-            setEmailValidation({
-                isChecking: false,
-                isValid: null,
-                message: '',
-                exists: false
-            });
-
-            setErrors(prev => ({
-                ...prev,
-                email: undefined
-            }));
-
-            if (newValue && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newValue)) {
-                debouncedEmailCheck(newValue);
-            }
+            setEmailValidation({ isChecking: false, isValid: null, message: '', exists: false });
+            setErrors(prev => ({ ...prev, email: undefined }));
+            if (newValue && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newValue)) debouncedEmailCheck(newValue);
         }
 
         if (errors[name] || type !== "file") {
             const error = validateField(name, newValue);
-            setErrors(prev => ({
-                ...prev,
-                [name]: error || undefined
-            }));
+            setErrors(prev => ({ ...prev, [name]: error || undefined }));
         }
     };
 
     const handleFileBlur = (e) => {
         const { name, files } = e.target;
         const error = validateField(name, files[0]);
-        setErrors(prev => ({
-            ...prev,
-            [name]: error || undefined
-        }));
+        setErrors(prev => ({ ...prev, [name]: error || undefined }));
     };
 
     const handleNext = () => {
-        if (validateStep(step)) {
+        // Pass true to trigger the toast if validation fails
+        if (validateStep(step, true)) {
             setStep(step + 1);
             showToast(`Step ${step} completed successfully`, 'info', 2000);
-        } else {
-            showToast('Please fix the errors before proceeding', 'warning', 4000);
-        }
+        } 
+        // No else needed, validateStep handles the error toast
     };
 
     const handlePrevious = () => {
@@ -1025,35 +754,22 @@ export default function Registration() {
     };
 
     const handleSubmit = async () => {
-        if (validateStep(2) && validateStep(3) && validateStep(4)) {
+        if (validateStep(2, true) && validateStep(3, true) && validateStep(4, true)) {
             setIsSubmitting(true);
             showToast('Submitting your registration...', 'info', 3000);
 
             try {
-                // Create an array of upload promises
                 const uploadPromises = [];
+                if (formData.panFile) uploadPromises.push(uploadToCloudinary(formData.panFile));
+                else uploadPromises.push(Promise.resolve(''));
 
-                if (formData.panFile) {
-                    uploadPromises.push(uploadToCloudinary(formData.panFile));
-                } else {
-                    uploadPromises.push(Promise.resolve('')); // Add placeholder for indexing
-                }
+                if (formData.gstFile) uploadPromises.push(uploadToCloudinary(formData.gstFile));
+                else uploadPromises.push(Promise.resolve(''));
 
-                if (formData.gstFile) {
-                    uploadPromises.push(uploadToCloudinary(formData.gstFile));
-                } else {
-                    uploadPromises.push(Promise.resolve(''));
-                }
+                if (formData.addressProof) uploadPromises.push(uploadToCloudinary(formData.addressProof));
+                else uploadPromises.push(Promise.resolve(''));
 
-                if (formData.addressProof) {
-                    uploadPromises.push(uploadToCloudinary(formData.addressProof));
-                } else {
-                    uploadPromises.push(Promise.resolve(''));
-                }
-
-                // Run all uploads at the same time for speed
                 const [panFileUrl, gstFileUrl, addressProofUrl] = await Promise.all(uploadPromises);
-
                 showToast('Documents uploaded. Submitting registration...', 'info', 5000);
 
                 const registrationData = {
@@ -1089,7 +805,6 @@ export default function Registration() {
                     gstFileUrl,
                     addressProofUrl,
                 };
-                // IMPORTANT: Remove the raw file objects before sending to the backend
                 delete registrationData.panFile;
                 delete registrationData.gstFile;
 
@@ -1111,9 +826,11 @@ export default function Registration() {
                 setIsSubmitting(false);
             }
         } else {
-            console.log("Validation failed. Please check all steps.");
-            showToast('Please complete all required fields correctly', 'error', 5000);
-            setStep(2);
+             console.log("Validation failed. Please check all steps.");
+             // The individual validateStep calls with true might have triggered toasts, 
+             // but if checking all steps at once, we might want a generic one too
+             showToast('Please fix the errors before submitting', 'error', 5000);
+             setStep(2);
         }
     };
 
@@ -1147,12 +864,10 @@ export default function Registration() {
                                 <div>
                                     <label htmlFor="firstName" className="required-field">First Name</label>
                                     <input type="text" id="firstName" name="firstName" placeholder="First Name" value={formData.firstName} onChange={handleChange} className={errors.firstName ? 'error' : ''} />
-                                    {errors.firstName && <span className="error-message">{errors.firstName}</span>}
                                 </div>
                                 <div>
                                     <label htmlFor="lastName" className="required-field">Last Name</label>
                                     <input type="text" id="lastName" name="lastName" placeholder="Last Name" value={formData.lastName} onChange={handleChange} className={errors.lastName ? 'error' : ''} />
-                                    {errors.lastName && <span className="error-message">{errors.lastName}</span>}
                                 </div>
                                 <div>
                                     <label htmlFor="mobile" className="required-field">Mobile Number</label>
@@ -1179,20 +894,14 @@ export default function Registration() {
                                             )}
                                         </div>
                                     </div>
-                                    {errors.mobile && <span className="error-message">{errors.mobile}</span>}
-                                    {!errors.mobile && mobileValidation.message && mobileValidation.isValid === true && (
-                                        <span className="success-message">{mobileValidation.message}</span>
-                                    )}
                                 </div>
                                 <div>
                                     <label htmlFor="whatsapp">Whatsapp Number</label>
                                     <input type="tel" id="whatsapp" name="whatsapp" placeholder="Whatsapp Number" value={formData.whatsapp} onChange={handleChange} className={errors.whatsapp ? 'error' : ''} />
-                                    {errors.whatsapp && <span className="error-message">{errors.whatsapp}</span>}
                                 </div>
                                 <div>
                                     <label htmlFor="alternate">Alternate Number</label>
                                     <input type="tel" id="alternate" name="alternate" placeholder="Alternate Number" value={formData.alternate} onChange={handleChange} className={errors.alternate ? 'error' : ''} />
-                                    {errors.alternate && <span className="error-message">{errors.alternate}</span>}
                                 </div>
                                 <div>
                                     <label htmlFor="email" className="required-field">Email Address</label>
@@ -1218,20 +927,14 @@ export default function Registration() {
                                             )}
                                         </div>
                                     </div>
-                                    {errors.email && <span className="error-message">{errors.email}</span>}
-                                    {!errors.email && emailValidation.message && emailValidation.isValid === true && (
-                                        <span className="success-message">{emailValidation.message}</span>
-                                    )}
                                 </div>
                                 <div>
                                     <label htmlFor="password" className="required-field">Password</label>
                                     <input type="password" id="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} className={errors.password ? 'error' : ''} />
-                                    {errors.password && <span className="error-message">{errors.password}</span>}
                                 </div>
                                 <div>
                                     <label htmlFor="confirmPassword" className="required-field">Confirm Password</label>
                                     <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} className={errors.confirmPassword ? 'error' : ''} />
-                                    {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
                                 </div>
                             </div>
                         </div>
@@ -1250,22 +953,18 @@ export default function Registration() {
                                 <div>
                                     <label htmlFor="businessName" className="required-field">Business/Agency Name</label>
                                     <input type="text" id="businessName" name="businessName" placeholder="Business/Agency Name" value={formData.businessName} onChange={handleChange} className={errors.businessName ? 'error' : ''} />
-                                    {errors.businessName && <span className="error-message">{errors.businessName}</span>}
                                 </div>
                                 <div>
                                     <label htmlFor="businessType" className="required-field">Business Type</label>
                                     <input type="text" id="businessType" name="businessType" placeholder="e.g., Proprietorship, Partnership" value={formData.businessType} onChange={handleChange} className={errors.businessType ? 'error' : ''} />
-                                    {errors.businessType && <span className="error-message">{errors.businessType}</span>}
                                 </div>
                                 <div>
                                     <label htmlFor="nature" className="required-field">Nature of Business</label>
                                     <input type="text" id="nature" name="nature" placeholder="e.g., Travel Agency, Tour Operator" value={formData.nature} onChange={handleChange} className={errors.nature ? 'error' : ''} />
-                                    {errors.nature && <span className="error-message">{errors.nature}</span>}
                                 </div>
                                 <div>
                                     <label htmlFor="businessAddress" className="required-field">Business Address</label>
                                     <input type="text" id="businessAddress" name="businessAddress" placeholder="Business Address" value={formData.businessAddress} onChange={handleChange} className={errors.businessAddress ? 'error' : ''} />
-                                    {errors.businessAddress && <span className="error-message">{errors.businessAddress}</span>}
                                 </div>
                                 <div>
                                     <label htmlFor="panNumber" className="required-field">PAN Number</label>
@@ -1293,10 +992,6 @@ export default function Registration() {
                                             )}
                                         </div>
                                     </div>
-                                    {errors.panNumber && <span className="error-message">{errors.panNumber}</span>}
-                                    {!errors.panNumber && panValidation.message && panValidation.isValid === true && (
-                                        <span className="success-message">{panValidation.message}</span>
-                                    )}
                                 </div>
                                 <div>
                                     <label htmlFor="gstNumber">GST Number (Optional)</label>
@@ -1305,7 +1000,6 @@ export default function Registration() {
                                 <div className="file-input-group">
                                     <label htmlFor="panFile" className="required-field">PAN File</label>
                                     <input type="file" id="panFile" accept=".jpg,.jpeg,.png" name="panFile" onChange={handleChange} onBlur={handleFileBlur} className={errors.panFile ? 'error' : ''} />
-                                    {errors.panFile && <span className="error-message">{errors.panFile}</span>}
                                 </div>
                                 <div className="file-input-group">
                                     <label htmlFor="gstFile">GST File (Optional)</label>
@@ -1328,7 +1022,6 @@ export default function Registration() {
                                 <div>
                                     <label htmlFor="address1" className="required-field">Address Line 1</label>
                                     <input type="text" id="address1" name="address1" placeholder="Address Line 1" value={formData.address1} onChange={handleChange} className={errors.address1 ? 'error' : ''} />
-                                    {errors.address1 && <span className="error-message">{errors.address1}</span>}
                                 </div>
                                 <div>
                                     <label htmlFor="address2">Address Line 2 (Optional)</label>
@@ -1337,27 +1030,22 @@ export default function Registration() {
                                 <div>
                                     <label htmlFor="postalCode" className="required-field">Postal Code</label>
                                     <input type="text" id="postalCode" name="postalCode" placeholder="Postal Code" value={formData.postalCode} onChange={handleChange} className={errors.postalCode ? 'error' : ''} />
-                                    {errors.postalCode && <span className="error-message">{errors.postalCode}</span>}
                                 </div>
                                 <div>
                                     <label htmlFor="city" className="required-field">City</label>
                                     <input type="text" id="city" name="city" placeholder="City" value={formData.city} onChange={handleChange} className={errors.city ? 'error' : ''} />
-                                    {errors.city && <span className="error-message">{errors.city}</span>}
                                 </div>
                                 <div>
                                     <label htmlFor="state" className="required-field">State</label>
                                     <input type="text" id="state" name="state" placeholder="State" value={formData.state} onChange={handleChange} className={errors.state ? 'error' : ''} />
-                                    {errors.state && <span className="error-message">{errors.state}</span>}
                                 </div>
                                 <div>
                                     <label htmlFor="country" className="required-field">Country</label>
                                     <input type="text" id="country" name="country" placeholder="Country" value={formData.country} onChange={handleChange} className={errors.country ? 'error' : ''} />
-                                    {errors.country && <span className="error-message">{errors.country}</span>}
                                 </div>
                                 <div className="file-input-group">
                                     <label htmlFor="addressProof" className="required-field">Address Proof</label>
                                     <input type="file" id="addressProof" accept=".jpg,.jpeg,.png" name="addressProof" onChange={handleChange} onBlur={handleFileBlur} className={errors.addressProof ? 'error' : ''} />
-                                    {errors.addressProof && <span className="error-message">{errors.addressProof}</span>}
                                 </div>
                             </div>
                         </div>
@@ -1447,9 +1135,9 @@ export default function Registration() {
 
                                 <div className="review-section">
                                     <h3>Account Information</h3>
-                                        <div className="review-item">
-                                            <span className="review-value">A Welcome Mail will be Shared to your Mail ID , and your Username and Password will be shared to your Mail ID </span>
-                                        </div>
+                                    <div className="review-item">
+                                        <span className="review-value">A Welcome Mail will be Shared to your Mail ID , and your Username and Password will be shared to your Mail ID </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1559,20 +1247,6 @@ export default function Registration() {
 
                 .error-icon {
                     color: #ef4444;
-                }
-
-                .success-message {
-                    color: #10b981;
-                    font-size: 12px;
-                    margin-top: 4px;
-                    display: block;
-                }
-
-                .error-message {
-                    color: #ef4444;
-                    font-size: 12px;
-                    margin-top: 4px;
-                    display: block;
                 }
 
                 @keyframes spin {

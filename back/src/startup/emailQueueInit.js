@@ -19,7 +19,7 @@ export async function initializeEmailQueue() {
         }
         
         // Start automatic email processing
-        emailQueueService.startAutoProcessing(2); // Process every 2 minutes
+        emailQueueService.startAutoProcessing(1); // Process every 2 minutes
         
         // Process any pending emails immediately on startup
         console.log('📧 Processing any pending emails from previous server session...');

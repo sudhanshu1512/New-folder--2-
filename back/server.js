@@ -23,7 +23,7 @@ if (missingVars.length > 0) {
 import authRouter from './src/routes/auth.js';
 import bookingRouter from './src/routes/boookingRoutes.js';
 import bookingConfirmationRouter from './src/routes/bookingConfirmationRoutes.js';
-import cloudinaryRoutes from './src/routes/cloudinary.js';
+import cloudinaryRoutes from './src/routes/Cloudinary.js';
 import logoRoutes from './src/routes/settings.js';
 import profileRoutes from './src/routes/profile.js';
 import airportRoutes from './src/routes/airportRoutes.js';
@@ -64,7 +64,6 @@ app.use(cookieParser());
 // Test route
 app.get('/', (_, res) => res.send({ ok: true, message: 'Server is running' }));
 
-// API Routes
 app.use('/api/auth', authRouter);
 app.use('/api', bookingRouter);
 app.use('/api/bookings', bookingConfirmationRouter);

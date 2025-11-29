@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { toast, Toaster } from 'react-hot-toast'; // ⬅️ IMPORTED toast and Toaster
+import { toast, Toaster } from 'react-hot-toast';
 import {
     FaCheck, FaPlane, FaUser, FaBirthdayCake, FaPhoneAlt, FaEnvelope,
     FaUserFriends, FaWallet, FaArrowRight, FaExclamationCircle, FaSpinner,
@@ -26,12 +26,10 @@ const fetchAgentBalance = async () => {
             return response.data.balance;
         } else {
             console.error('Failed to fetch balance:', response.data.message);
-            // Optionally show a toast here, but generally fetching errors are handled by parent components or just logged
             return 0;
         }
     } catch (error) {
         console.error('Error fetching balance:', error);
-        // Optionally show a toast here
         return 0;
     }
 };
@@ -171,7 +169,6 @@ const FlightItinerary = ({ flightDetails, onNext }) => {
 const PassengerDetails = ({ passengers, setPassengers, contactDetails, setContactDetails, onNext, onBack, errors, setErrors, flightDetails, validateDateOfBirth }) => {
     const [expandedPassengers, setExpandedPassengers] = useState({});
 
-    // --- NEW: Helper to open date picker on click ---
     const handleInputClick = (e) => {
         try {
             if (typeof e.target.showPicker === 'function') {
@@ -187,15 +184,12 @@ const PassengerDetails = ({ passengers, setPassengers, contactDetails, setContac
         updatedPassengers[index][field] = value;
         setPassengers(updatedPassengers);
 
-        // Clear error for this field on change
         if (errors[`pax-${index}-${field}`]) {
             setErrors(prev => ({ ...prev, [`pax-${index}-${field}`]: null }));
         }
 
-        // Validate date of birth if it's being changed (using the prop)
         if (field === 'dob' && value) {
             const dobError = validateDateOfBirth(value, updatedPassengers[index].type);
-            // Set error if validation fails, clear it if it passes
             setErrors(prev => ({ ...prev, [`pax-${index}-dob`]: dobError }));
         }
     };
@@ -233,13 +227,13 @@ const PassengerDetails = ({ passengers, setPassengers, contactDetails, setContac
 
         switch (passengerType.toLowerCase()) {
             case 'adult':
-                yearsBack = 100; // Maximum age limit
+                yearsBack = 100;
                 break;
             case 'child':
-                yearsBack = 14; // Child can be max 14 years old (adjusted from 4 based on typical airline logic, but keeping your logic)
+                yearsBack = 14;
                 break;
             case 'infant':
-                yearsBack = 2; // Infant can be max 2 year old usually
+                yearsBack = 2;
                 break;
             default:
                 yearsBack = 100;
@@ -256,12 +250,10 @@ const PassengerDetails = ({ passengers, setPassengers, contactDetails, setContac
 
         if (!hasBasicInfo) return false;
 
-        // Check if DOB is valid for passenger type
         const dobError = validateDateOfBirth(passenger.dob, passenger.type);
         return dobError === null;
     };
 
-    // Group passengers by type
     const groupedPassengers = passengers.reduce((acc, passenger, index) => {
         const type = passenger.type.toUpperCase();
         if (!acc[type]) acc[type] = [];
@@ -271,7 +263,6 @@ const PassengerDetails = ({ passengers, setPassengers, contactDetails, setContac
 
     return (
         <>
-            {/* Flight Details Summary */}
             <div className={`${styles.flightCard} ${styles.animatedCard}`}>
                 <div className={styles.flightHeader}>
                     <div>
@@ -309,7 +300,6 @@ const PassengerDetails = ({ passengers, setPassengers, contactDetails, setContac
                         <div className={styles.airlineName}>{flightDetails.airline}</div>
                         <div className={styles.flightNumber}>{flightDetails.flightNo}</div>
                     </div>
-
                 </div>
 
                 <div className={styles.routeSection}>
@@ -414,8 +404,6 @@ const PassengerDetails = ({ passengers, setPassengers, contactDetails, setContac
                                             <div className={styles.formRow}>
                                                 <div className={styles.inputGroup}>
                                                     <label className={styles.inputLabel}>Date of Birth</label>
-                                                    
-                                                    {/* ⬇️ UPDATED INPUT HERE ⬇️ */}
                                                     <input
                                                         type="date"
                                                         value={passenger.dob}
@@ -423,11 +411,9 @@ const PassengerDetails = ({ passengers, setPassengers, contactDetails, setContac
                                                         className={errors[`pax-${originalIndex}-dob`] ? styles.inputError : ''}
                                                         max={getMaxDate()}
                                                         min={getMinDate(passenger.type)}
-                                                        onClick={handleInputClick} // Added click handler
-                                                        style={{ cursor: 'pointer' }} // Added cursor style
+                                                        onClick={handleInputClick}
+                                                        style={{ cursor: 'pointer' }}
                                                     />
-                                                    {/* ⬆️ UPDATED INPUT HERE ⬆️ */}
-
                                                     {errors[`pax-${originalIndex}-dob`] && <span className={styles.errorMessage}><FaExclamationCircle /> {errors[`pax-${originalIndex}-dob`]}</span>}
                                                 </div>
                                                 <div className={styles.inputGroup}>
@@ -558,18 +544,16 @@ const Review = ({ flightDetails, passengers, contactDetails, onNext, onBack }) =
     );
 };
 
-const Payment = ({ onConfirm, onBack, totalAmount, isSubmitting, setIsSubmitting }) => { // ⬅️ ADDED totalAmount prop
+// ============ UPDATED PAYMENT COMPONENT ============
+const Payment = ({ onConfirm, onBack, totalAmount, isSubmitting, setIsSubmitting }) => {
     const [selectedPayment, setSelectedPayment] = useState('wallet');
     const [balance, setBalance] = useState(0);
-    const [isOtherPaymentDisabled] = useState(true); // Disable other payment options
+    const [isOtherPaymentDisabled] = useState(true);
 
-    // 💡 Logic for Wallet Balance Validation
-    // Assume totalAmount is passed as a prop from the parent component (BookingPage)
     const isBalanceSufficient = balance >= (totalAmount || 0);
     const isWalletSelected = selectedPayment === 'wallet';
     const isConfirmDisabled = isWalletSelected && !isBalanceSufficient;
 
-    // Helper to format currency
     const formatCurrency = (amount) => `₹${(amount || 0).toFixed(2)}`;
 
     useEffect(() => {
@@ -581,24 +565,28 @@ const Payment = ({ onConfirm, onBack, totalAmount, isSubmitting, setIsSubmitting
     }, []);
 
     const handleConfirm = async () => {
-        // Show error toast if wallet is selected but balance is insufficient
         if (isWalletSelected && !isBalanceSufficient) {
             toast.error("Booking cannot proceed. Insufficient wallet balance. Please choose another payment method or add money to your wallet.");
             return;
         }
-        // Proceed with the payment
         if (isSubmitting) return;
 
         try {
-            setIsSubmitting(true);
+            // Note: We don't need to manually set isSubmitting(true) here because
+            // the button's onClick handler calls setIsSubmitting(true) before calling this onConfirm,
+            // or the parent handles it.
+            // But to be safe, if onConfirm is responsible:
+            // await onConfirm(selectedPayment); 
+            // The parent (BookingPage) handles the setIsSubmitting logic usually, 
+            // but here we are passed the state.
+            
             await onConfirm(selectedPayment);
+            
         } catch (error) {
             console.error('Confirmation error:', error);
-            // Handle error (e.g., show error message)
-        } finally {
             setIsSubmitting(false);
+            toast.error(error.message || 'Failed to process booking. Please try again.');
         }
-
     }
 
     return (
@@ -611,7 +599,7 @@ const Payment = ({ onConfirm, onBack, totalAmount, isSubmitting, setIsSubmitting
 
             <div className={styles.paymentMethods}>
 
-                {/* 1. Wallet Payment Option (Modified with Validation) */}
+                {/* Wallet Payment Option */}
                 <div
                     className={`${styles.paymentOption} ${isWalletSelected ? styles.selected : ''} ${!isBalanceSufficient && styles.disabledOption}`}
                     onClick={() => setSelectedPayment('wallet')}
@@ -624,7 +612,7 @@ const Payment = ({ onConfirm, onBack, totalAmount, isSubmitting, setIsSubmitting
                         checked={isWalletSelected}
                         onChange={() => setSelectedPayment('wallet')}
                         className={styles.paymentRadio}
-                        disabled={!isBalanceSufficient} // Optionally disable if balance is low
+                        disabled={!isBalanceSufficient}
                     />
                     <div className={styles.paymentContent}>
                         <div className={styles.paymentTitle}>
@@ -635,7 +623,6 @@ const Payment = ({ onConfirm, onBack, totalAmount, isSubmitting, setIsSubmitting
                             <span className={styles.balanceAmount}>{formatCurrency(balance)}</span>
                         </div>
 
-                        {/* ⚠️ VALIDATION MESSAGE: Insufficient Balance */}
                         {isWalletSelected && (
                             <div className={`${styles.walletValidation} ${isBalanceSufficient ? styles.success : styles.error}`}>
                                 {isBalanceSufficient ? (
@@ -652,7 +639,7 @@ const Payment = ({ onConfirm, onBack, totalAmount, isSubmitting, setIsSubmitting
                     </div>
                 </div>
 
-                {/* 2. UPI/QR Code Option (New Feature) */}
+                {/* UPI/QR Code Option */}
                 <div
                     className={`${styles.paymentOption} ${selectedPayment === 'upi' ? styles.selected : ''}`}
                     onClick={() => setSelectedPayment('upi')}
@@ -677,7 +664,7 @@ const Payment = ({ onConfirm, onBack, totalAmount, isSubmitting, setIsSubmitting
                     </div>
                 </div>
 
-                {/* 3. Net Banking Option (New Feature) */}
+                {/* Net Banking Option */}
                 <div
                     className={`${styles.paymentOption} ${selectedPayment === 'netbanking' ? styles.selected : ''}`}
                     onClick={() => setSelectedPayment('netbanking')}
@@ -702,7 +689,7 @@ const Payment = ({ onConfirm, onBack, totalAmount, isSubmitting, setIsSubmitting
                     </div>
                 </div>
 
-                {/* Optional: Debit/Credit Card Option */}
+                {/* Debit/Credit Card Option */}
                 <div
                     className={`${styles.paymentOption} ${selectedPayment === 'card' ? styles.selected : ''}`}
                     onClick={() => setSelectedPayment('card')}
@@ -730,11 +717,19 @@ const Payment = ({ onConfirm, onBack, totalAmount, isSubmitting, setIsSubmitting
             </div>
 
             <div className={styles.buttonGroup}>
-                <button onClick={onBack} className={`${styles.actionButton} ${styles.backButton}`}>Back</button>
                 <button
-                    onClick={(e) => {
+                    onClick={onBack}
+                    className={`${styles.actionButton} ${styles.backButton}`}
+                    disabled={isSubmitting}
+                >
+                    Back
+                </button>
+                <button
+                    onClick={async (e) => {
+                        e.preventDefault();
+
+                        // 1. Validation Logic
                         if (isConfirmDisabled || !isWalletSelected) {
-                            e.preventDefault();
                             if (!isWalletSelected) {
                                 toast.error("Please use wallet payment for now. Other payment methods are coming soon!", {
                                     position: "top-right",
@@ -756,12 +751,39 @@ const Payment = ({ onConfirm, onBack, totalAmount, isSubmitting, setIsSubmitting
                             }
                             return;
                         }
-                        handleConfirm();
+
+                        // 2. Submission Logic
+                        try {
+                            await handleConfirm();
+                        } catch (error) {
+                            console.error('Error during booking confirmation:', error);
+                            toast.error("An error occurred while processing your booking. Please try again.", {
+                                position: "top-right",
+                                autoClose: 3000
+                            });
+                        }
                     }}
-                    className={`${styles.actionButton} ${(isConfirmDisabled || !isWalletSelected) ? styles.disabledButton : ''}`}
-                    style={(isConfirmDisabled || !isWalletSelected) ? { cursor: 'not-allowed', opacity: 0.7 } : {}}
+                    // 3. CSS Classes
+                    className={`${styles.actionButton} ${(isConfirmDisabled || !isWalletSelected || isSubmitting) ? styles.disabledButton : ''}`}
+
+                    // 4. Disable when submitting
+                    disabled={isSubmitting}
+
+                    // 5. Styles
+                    style={{
+                        cursor: (isConfirmDisabled || !isWalletSelected || isSubmitting) ? 'not-allowed' : 'pointer',
+                        opacity: (isConfirmDisabled || !isWalletSelected || isSubmitting) ? 0.7 : 1,
+                        position: 'relative'
+                    }}
                 >
-                    Confirm & Book
+                    {isSubmitting ? (
+                        <>
+                            <FaSpinner className={styles.spinner} />
+                            <span style={{ marginLeft: '8px' }}>Processing...</span>
+                        </>
+                    ) : (
+                        'Confirm & Book'
+                    )}
                 </button>
             </div>
         </div>
@@ -773,7 +795,7 @@ const Payment = ({ onConfirm, onBack, totalAmount, isSubmitting, setIsSubmitting
 const BookingPage = () => {
     const navigate = useNavigate();
     const { quoteId } = useParams();
-    const { currentUser } = useAuth(); // Call useAuth at the top level
+    const { currentUser } = useAuth();
     const [currentStep, setCurrentStep] = useState(1);
     const [quoteData, setQuoteData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -781,8 +803,11 @@ const BookingPage = () => {
     const [passengers, setPassengers] = useState([]);
     const [contactDetails, setContactDetails] = useState({ phone: '', email: '' });
     const [errors, setErrors] = useState({});
-    const [timeLeft, setTimeLeft] = useState(0); // Will be set from the API response
+    const [timeLeft, setTimeLeft] = useState(0);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    
+    // NEW STATE: For the redirect loader overlay
+    const [isRedirecting, setIsRedirecting] = useState(false);
 
     useEffect(() => {
         const fetchQuoteData = async () => {
@@ -793,7 +818,6 @@ const BookingPage = () => {
                 if (data.success) {
                     setQuoteData(data);
 
-                    // Set the timer from the server's remaining time
                     if (data.timeRemaining && data.timeRemaining > 0) {
                         setTimeLeft(data.timeRemaining);
                     }
@@ -804,16 +828,14 @@ const BookingPage = () => {
                         ...Array(children?.count || 0).fill({ type: 'Child', title: 'Master', firstName: '', lastName: '', dob: '', gender: 'Male' }),
                         ...Array(infants?.count || 0).fill({ type: 'Infant', title: 'Master', firstName: '', lastName: '', dob: '', gender: 'Male' })
                     ];
-                    setPassengers(initialPassengers.map((p, i) => ({ ...p, id: i }))); // Add unique id
+                    setPassengers(initialPassengers.map((p, i) => ({ ...p, id: i })));
                 } else {
-                    // If the API call itself reports failure (e.g., quote expired)
                     throw new Error(data.message || 'Failed to fetch quote data.');
                 }
             } catch (e) {
-                // Catches network errors or errors thrown from the try block
                 setError(e.message);
                 console.error("Error fetching quote data:", e);
-                toast.error(`Error loading quote: ${e.message}`); // ⬅️ TOAST FOR FETCH ERROR
+                toast.error(`Error loading quote: ${e.message}`);
             } finally {
                 setLoading(false);
             }
@@ -824,7 +846,7 @@ const BookingPage = () => {
         } else {
             setLoading(false);
             setError('No quote ID provided.');
-            toast.error('No quote ID provided. Redirecting.'); // ⬅️ TOAST FOR MISSING ID
+            toast.error('No quote ID provided. Redirecting.');
             navigate('/');
         }
     }, [quoteId, navigate]);
@@ -832,8 +854,7 @@ const BookingPage = () => {
     useEffect(() => {
         if (timeLeft <= 0) {
             if (timeLeft < 0) {
-                // Only show toast if the timer was actively running and hit zero/expired.
-                toast.error("Your quote has expired. Please search again."); // ⬅️ TOAST FOR TIMER EXPIRED
+                toast.error("Your quote has expired. Please search again.");
                 setError('Your session has expired. Please search again.');
             }
             return;
@@ -865,7 +886,6 @@ const BookingPage = () => {
         const today = new Date();
         const birthDate = new Date(dob);
 
-        // Check if date is in the future
         if (birthDate > today) {
             return 'Date of birth cannot be in the future';
         }
@@ -895,7 +915,7 @@ const BookingPage = () => {
                 break;
         }
 
-        return null; // No error
+        return null;
     };
 
     const validateStep2 = () => {
@@ -904,7 +924,6 @@ const BookingPage = () => {
             if (!p.firstName.trim()) newErrors[`pax-${i}-firstName`] = 'First name is required.';
             if (!p.lastName.trim()) newErrors[`pax-${i}-lastName`] = 'Last name is required.';
 
-            // Use the centralized validation function for DOB
             const dobError = validateDateOfBirth(p.dob, p.type);
             if (dobError) {
                 newErrors[`pax-${i}-dob`] = dobError;
@@ -926,7 +945,7 @@ const BookingPage = () => {
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length > 0) {
-            toast.error('Please fix the errors in Passenger and Contact Details.'); // ⬅️ TOAST FOR VALIDATION ERROR
+            toast.error('Please fix the errors in Passenger and Contact Details.');
             return false;
         }
 
@@ -942,6 +961,7 @@ const BookingPage = () => {
 
     const handleBack = () => setCurrentStep(prev => prev > 1 ? prev - 1 : prev);
 
+    // ============ UPDATED CONFIRM HANDLER ============
     const handleConfirmBooking = async (paymentMethod) => {
         if (isSubmitting) return;
         setIsSubmitting(true);
@@ -968,29 +988,26 @@ const BookingPage = () => {
                 const booking = response.data.booking;
                 const emailStatus = response.data.emailStatus;
 
-                // Log success
-                console.log('Booking Success:', {
-                    bookingId: booking.bookingId,
-                    timestamp: new Date().toISOString(),
-                    emailProcessing: emailStatus?.processing
-                });
-
-                // Store booking details
                 localStorage.setItem('latestBooking', JSON.stringify(booking));
 
-                // Show success message with email status
                 if (emailStatus?.processing) {
                     toast.success(`Booking Confirmed! Confirmation email is being sent to your email address.`);
                 } else if (emailStatus?.sent) {
                     toast.success(`Booking Confirmed! Confirmation email sent successfully.`);
                 } else {
-                    toast.success(`Booking Confirmed!`);
+                    toast.success(`Booking Confirmed, Redirecting you to ticket`);
                 }
 
-                // Redirect after a short delay
+                // Show the redirect loader overlay
+                setIsRedirecting(true);
+
+                const bookingId = response.data.booking.bookingId;
+                
                 setTimeout(() => {
-                    navigate('/');
+                    navigate('/booking-details/' + bookingId);
                 }, 3000);
+
+                return;
 
             } else {
                 throw new Error(response.data.message || 'Booking confirmation failed');
@@ -1017,8 +1034,6 @@ const BookingPage = () => {
 
             setError(errorMessage);
             toast.error(`Booking Failed: ${errorMessage}`);
-
-        } finally {
             setIsSubmitting(false);
         }
     };
@@ -1049,27 +1064,21 @@ const BookingPage = () => {
 
     return (
         <div className={styles.pageContainer}>
-            {/* ⬅️ Add Toaster Component */}
             <Toaster
                 position="top-right"
                 reverseOrder={false}
                 toastOptions={{
-                    // Style applied to all toasts
                     className: styles.customToast,
                     duration: 3000,
-                    // Specific styles for error and success
                     error: {
                         style: {
-
-                            // Dark Red Text
                             border: '1px solid #e74c3c',
-
                         },
                     },
                     success: {
                         style: {
-                            background: '#e8ffed', // Light Green
-                            color: '#27ae60', // Dark Green Text
+                            background: '#e8ffed',
+                            color: '#27ae60',
                             border: '1px solid #27ae60',
                             fontWeight: 'bold',
                         },
@@ -1084,6 +1093,44 @@ const BookingPage = () => {
                 <div className={styles.leftPanel}>{renderStep()}</div>
                 <div className={styles.rightPanel}><FareSummary fare={quoteData.priceBreakdown} /></div>
             </div>
+
+            {/* ============ REDIRECT LOADER OVERLAY ============ */}
+            {isRedirecting && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: '#ffffff',
+                    zIndex: 9999,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    transition: 'opacity 0.3s ease-in-out'
+                }}>
+                    <FaPlane
+                        style={{
+                            fontSize: '40px',
+                            color: '#2563eb',
+                            marginBottom: '20px',
+                            animation: 'bounce 2s infinite' // ensure you have a bounce keyframe or remove if not needed
+                        }}
+                    />
+                    <FaSpinner
+                        className={styles.spinner} // This reuses your rotation animation
+                        style={{
+                            fontSize: '50px',
+                            color: '#2563eb',
+                            marginBottom: '20px'
+                        }}
+                    />
+                    <h2 style={{ color: '#1e293b', marginBottom: '10px' }}>Booking Confirmed!</h2>
+                    <p style={{ color: '#64748b', fontSize: '16px' }}>Redirecting to your ticket details...</p>
+                </div>
+            )}
+
         </div>
     );
 }

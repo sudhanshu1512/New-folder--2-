@@ -13,11 +13,11 @@ router.get('/usersno', async (req, res) => {
         
         const query = `
             SELECT 
-                (SELECT COUNT(*) FROM agent_register WHERE IsSupplier = 1) as usersno,
+                (SELECT COUNT(*) FROM agent_register) as usersno,
                 (SELECT COUNT(*) FROM FlightSearchResults) as total_flight_searches,
                 (SELECT COUNT(*) FROM FlightSearchResults WHERE CAST(Createdate AS DATE) = CAST(GETDATE() AS DATE)) as today_flight_searches,
                 (SELECT COUNT(*) FROM FltHeader) as total_bookings,
-                (SELECT COUNT(*) FROM FltHeader WHERE CAST(booking_date AS DATE) = CAST(GETDATE() AS DATE)) as today_bookings,
+                (SELECT COUNT(*) FROM FltHeader WHERE CAST(CreateDate AS DATE) = CAST(GETDATE() AS DATE)) as today_bookings,
                 ar.Fname + ' ' + ar.Lname as fullname,
                 ROW_NUMBER() OVER (ORDER BY ar.timestamp_create DESC, ar.User_Id DESC) as rn
             FROM agent_register ar

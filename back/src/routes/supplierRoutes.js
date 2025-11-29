@@ -29,7 +29,9 @@ router.get('/suppliers',authenticateJWT, async (req, res) => {
                 ISNULL(Agent_Type, '') as agentType,
                 ISNULL(Address, '') as address
             FROM agent_register
-            WHERE IsSupplier = 1 AND User_Id != @currentUserId   -- Only get suppliers except current user
+            WHERE IsSupplier = 1 AND User_Id != @currentUserId 
+                AND Agency_Name IS NOT NULL
+                AND Agency_Name <> ''
             ORDER BY AgencyId
         `;
         
@@ -144,5 +146,6 @@ router.get('/suppliers/search', authenticateJWT, async (req, res) => {
         });
     }
 });
+
 
 export default router;

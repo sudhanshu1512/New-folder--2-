@@ -713,3 +713,73 @@
     margin-top: 20px;
   }
 }
+
+/* BookingDetails.module.css */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+/* --- New Button Layout Styles --- */
+
+.buttonRow {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.halfBtn {
+    flex: 1; /* This forces them to take 50% each */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 10px;
+    background: #fff;
+    border: 1px solid #0f766e;
+    color: #0f766e;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+    min-height: 48px;
+}
+
+.halfBtn:hover:not(:disabled) {
+    background-color: #f0fdfa;
+    transform: translateY(-1px);
+}
+
+.halfBtn:disabled {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* Specific style for the Email button to distinguish it */
+.emailBtn {
+    background: #0f766e;
+    color: white;
+}
+
+.emailBtn:hover:not(:disabled) {
+    background-color: #0d5f58;
+}
+
+/* Mobile responsive: Stack them if screen is too small */
+@media (max-width: 480px) {
+    .buttonRow {
+        flex-direction: column;
+    }
+    
+    .halfBtn {
+        width: 100%;
+    }
+}

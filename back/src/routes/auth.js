@@ -232,7 +232,9 @@ router.post('/login', async (req, res) => {
     const token = signAccessToken({
       id: agent.User_Id,
       userId: agent.User_Id,
-      email: agent.Email
+      email: agent.Email,
+      type: agent.Agent_Type,
+      status: agent.Agent_status
     });
     setAuthCookie(res, token);
 
@@ -245,7 +247,9 @@ router.post('/login', async (req, res) => {
         userId: agent.User_Id,
         name: `${agent.Fname} ${agent.Lname}`,
         email: agent.Email,
-        mobile: agent.User_Id
+        mobile: agent.User_Id,
+        type: agent.Agent_Type,
+        status: agent.Agent_status,
       }
     });
   } catch (error) {

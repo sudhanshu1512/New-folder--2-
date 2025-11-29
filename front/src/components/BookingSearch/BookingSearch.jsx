@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     FaSearch, FaPlane, FaCalendarAlt, FaSpinner, FaExclamationCircle,
@@ -31,32 +31,49 @@ const BookingSearch = () => {
         ALL: 0, UPCOMING: 0, COMPLETED: 0, CANCELLED: 0
     });
 
-    // --- 1. Initial Fetch on Mount ---
+    // --- 1. Initial Fetch for Counts on Mount ---
     useEffect(() => {
         api.get('/bookings/counts').then(res => {
             if (res.data.success) setBookingCounts(res.data.counts);
         }).catch(console.error);
-
-        fetchBookings(1, 'recent');
     }, []);
 
-    // --- 2. Unified Fetch Function ---
-    const fetchBookings = async (pageNum, mode) => {
+    // --- 2. Trigger Fetch when ActiveTab or ViewMode Changes ---
+    useEffect(() => {
+        // If we are looking at specific search results (ID/Date), ignore tab changes
+        if (viewMode === 'searchResult') return;
+
+        // Reset page to 1 for new tab/mode
+        setPage(1);
+        
+        // Fetch new data (passing true to reset the list)
+        fetchBookings(1, viewMode, activeTab, true);
+        
+    }, [activeTab, viewMode]);
+
+    // --- 3. Unified Fetch Function ---
+    const fetchBookings = async (pageNum, mode, filterType, isReset = false) => {
         setIsLoading(true);
         setError('');
         try {
             const limit = mode === 'recent' ? 3 : 10;
-            const endpoint = `/bookings/my-bookings?page=${pageNum}&limit=${limit}`;
+            
+            // Pass the filterType (ALL, CANCELLED, etc) to the backend
+            const endpoint = `/bookings/my-bookings?page=${pageNum}&limit=${limit}&filter=${filterType}`;
 
             const response = await api.get(endpoint);
 
             if (response.data.success) {
                 const newBookings = response.data.bookings.map(transformBookingData);
-                if (pageNum === 1) {
+                
+                if (isReset) {
+                    // Replaces list (Tab switch or View All)
                     setBookings(newBookings);
                 } else {
+                    // Appends to list (Load More)
                     setBookings(prev => [...prev, ...newBookings]);
                 }
+
                 const totalPages = response.data.pagination?.totalPages || 1;
                 setHasMore(pageNum < totalPages);
             } else {
@@ -70,23 +87,33 @@ const BookingSearch = () => {
         }
     };
 
+    // --- Handlers ---
+
     const handleViewAll = () => {
+        // Changing viewMode triggers the useEffect, which calls fetchBookings(1, 'all', activeTab, true)
         setViewMode('all');
-        setPage(1);
-        fetchBookings(1, 'all');
     };
 
     const handleLoadMore = () => {
         const nextPage = page + 1;
         setPage(nextPage);
-        fetchBookings(nextPage, 'all');
+        // Manual call for pagination (append mode)
+        fetchBookings(nextPage, 'all', activeTab, false);
     };
 
-    // Reset from search view back to normal list
     const handleClearSearch = () => {
         setSearchValue('');
         setViewMode('recent');
-        fetchBookings(1, 'recent');
+        // Setting viewMode back to 'recent' triggers useEffect to fetch default list
+    };
+
+    const handleTabClick = (tabKey) => {
+        setActiveTab(tabKey);
+        // If we were in search mode, exit it so the tab logic takes over
+        if (viewMode === 'searchResult') {
+            setViewMode('recent');
+            setSearchValue('');
+        }
     };
 
     // Data Transformer
@@ -112,7 +139,7 @@ const BookingSearch = () => {
         };
     };
 
-    // --- 3. Updated Search Logic ---
+    // Search Logic
     const handleSearch = async (e) => {
         e.preventDefault();
         if (!searchValue.trim()) return;
@@ -158,30 +185,17 @@ const BookingSearch = () => {
         }
     };
 
-    // --- NEW: Handle Input Click to open Calendar ---
     const handleInputClick = (e) => {
         if (searchType === 'date') {
             try {
-                // This checks if the browser supports the API and is a date input
                 if (typeof e.target.showPicker === 'function') {
                     e.target.showPicker();
                 }
             } catch (error) {
-                // Fallback for browsers that might block programmatic opening or don't support it
-                console.log('Date picker could not be opened programmatically');
+                console.log('Date picker error');
             }
         }
     };
-
-    const filteredBookings = useMemo(() => {
-        if (activeTab === 'ALL') return bookings;
-        return bookings.filter(b => {
-            if (activeTab === 'CANCELLED') return b.status === 'CANCELLED';
-            if (activeTab === 'COMPLETED') return b.status === 'CONFIRMED' && new Date(b.travelDate) < new Date();
-            if (activeTab === 'UPCOMING') return b.status === 'CONFIRMED' && new Date(b.travelDate) >= new Date();
-            return true;
-        });
-    }, [bookings, activeTab]);
 
     const getStatusIcon = (status) => status === 'CONFIRMED' ? <FaCheckCircle /> : status === 'CANCELLED' ? <FaTimesCircle /> : <FaClock />;
     const getStatusClass = (status) => status === 'CONFIRMED' ? styles.statusConfirmed : status === 'CANCELLED' ? styles.statusCancelled : styles.statusPending;
@@ -215,7 +229,6 @@ const BookingSearch = () => {
                 </div>
 
                 <form onSubmit={handleSearch} className={styles.searchForm}>
-                    {/* Radio Selectors */}
                     <div className={styles.searchTypeSelector}>
                         <label className={`${styles.radioLabel} ${searchType === 'bookingId' ? styles.radioLabelActive : ''}`}>
                             <input
@@ -241,26 +254,18 @@ const BookingSearch = () => {
                         </label>
                     </div>
 
-                    {/* Input Group */}
                     <div className={styles.inputGroup}>
                         <div className={styles.inputWrapper}>
-                            {searchType === 'bookingId' ? (
-                                <FaSearch className={styles.inputIcon} />
-                            ) : (
-                                <FaCalendarAlt className={styles.inputIcon} />
-                            )}
-
+                            {searchType === 'bookingId' ? <FaSearch className={styles.inputIcon} /> : <FaCalendarAlt className={styles.inputIcon} />}
                             <input
                                 type={searchType === 'date' ? 'date' : 'text'}
                                 value={searchValue}
                                 onChange={(e) => setSearchValue(e.target.value)}
-                                onClick={handleInputClick} // <--- ADDED THIS HANDLER
+                                onClick={handleInputClick}
                                 placeholder={searchType === 'bookingId' ? 'Enter your Booking ID' : 'Select Date'}
                                 className={styles.searchInput}
-                                style={{ cursor: searchType === 'date' ? 'pointer' : 'text' }} // Optional: Change cursor to indicate clickability
+                                style={{ cursor: searchType === 'date' ? 'pointer' : 'text' }}
                             />
-
-                            {/* Clear Button (Visible only if viewing search results) */}
                             {viewMode === 'searchResult' && (
                                 <button type="button" onClick={handleClearSearch} className={styles.clearBtn} style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#ef4444', marginRight: '10px' }}>
                                     <FaTimes />
@@ -272,11 +277,7 @@ const BookingSearch = () => {
                             className={`${styles.searchButton} ${(isSearching || !searchValue.trim()) ? styles.searchButtonDisabled : ''}`}
                             disabled={isSearching || !searchValue.trim()}
                         >
-                            {isSearching ? (
-                                <><FaSpinner className={styles.spinning} /><span>Searching...</span></>
-                            ) : (
-                                <><FaSearch /><span>Search</span></>
-                            )}
+                            {isSearching ? <><FaSpinner className={styles.spinning} /><span>Searching...</span></> : <><FaSearch /><span>Search</span></>}
                         </button>
                     </div>
                 </form>
@@ -288,7 +289,7 @@ const BookingSearch = () => {
                 </div>
             )}
 
-            {/* Filter Tabs (Clicking these resets search view) */}
+            {/* Filter Tabs */}
             <div className={styles.tabsWrapper}>
                 <div className={styles.tabsContainer}>
                     {[
@@ -300,10 +301,7 @@ const BookingSearch = () => {
                         <button
                             key={tab.key}
                             className={`${styles.tab} ${activeTab === tab.key ? styles.activeTab : ''}`}
-                            onClick={() => {
-                                setActiveTab(tab.key);
-                                if (viewMode === 'searchResult') handleClearSearch();
-                            }}
+                            onClick={() => handleTabClick(tab.key)}
                         >
                             <span className={styles.tabIcon}>{tab.icon}</span><span>{tab.label}</span>
                             <span className={styles.tabBadge}>{bookingCounts[tab.key] || 0}</span>
@@ -322,8 +320,8 @@ const BookingSearch = () => {
 
                 {isLoading && bookings.length === 0 ? (
                     <div className={styles.spinnerContainer}><FaSpinner className={`${styles.spinning} ${styles.spinner}`} /><p>Loading your bookings...</p></div>
-                ) : filteredBookings.length > 0 ? (
-                    filteredBookings.map((booking, index) => {
+                ) : bookings.length > 0 ? (
+                    bookings.map((booking, index) => {
                         const { day, month, year } = formatDateParts(booking.travelDate);
                         return (
                             <div key={booking.id} className={`${styles.bookingCard} ${styles.slideIn}`} style={{ animationDelay: `${index * 0.1}s` }}>
@@ -366,19 +364,25 @@ const BookingSearch = () => {
                 ) : (
                     <div className={`${styles.emptyState} ${styles.fadeIn}`}>
                         <FaTicketAlt className={styles.emptyIcon} />
-                        <h3 className={styles.emptyTitle}>No bookings found</h3>
+                        <h3 className={styles.emptyTitle}>No {activeTab !== 'ALL' ? activeTab.toLowerCase() : ''} bookings found</h3>
                     </div>
                 )}
             </div>
 
             {/* Load More Button Logic */}
             <div className={styles.loadMoreContainer}>
+                {/* If we are in 'recent' mode (limit 3) and we have results, 
+                   show "View Full History" to switch to 'all' mode.
+                */}
                 {viewMode === 'recent' && bookings.length >= 3 && (
                     <button className={styles.loadMoreButton} onClick={handleViewAll}>
                         <FaHistory /><span>View Full History</span>
                     </button>
                 )}
 
+                {/* If we are in 'all' mode and there are more pages, 
+                   show "Load More" to append next page.
+                */}
                 {viewMode === 'all' && hasMore && !isLoading && (
                     <button className={styles.loadMoreButton} onClick={handleLoadMore}>
                         <span>Load More</span><FaArrowRight />

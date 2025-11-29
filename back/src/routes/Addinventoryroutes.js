@@ -75,7 +75,8 @@ async function getAgentDetails(pool, mobileNo) {
             Mobile,
             GSTNO,
             GST_Company_Name,
-            GST_Company_Address
+            GST_Company_Address,
+            IsSupplier
         FROM agent_register 
         WHERE User_Id = @userMobileNo
     `;
@@ -165,6 +166,70 @@ async function getAirlineCode(airlineName) {
     }
 }
 
+
+// GET /api/agent/profile
+// Checks current agent's details and supplier status
+router.get('/agent/profile', authenticateJWT, async (req, res) => {
+    const pool = await getDbPool();
+
+    try {
+        const userMobileNo = req.user.id ? String(req.user.id) : null;
+
+        if (!userMobileNo) {
+            return res.status(401).json({ 
+                success: false, 
+                message: 'User mobile number is required' 
+            });
+        }
+
+        const query = `
+            SELECT 
+                Agency_Name,
+                Fname,
+                Lname,
+                Email,
+                Mobile,
+                IsSupplier
+            FROM agent_register 
+            WHERE User_Id = @userMobileNo
+        `;
+
+        const request = pool.request();
+        request.input('userMobileNo', sql.VarChar(50), userMobileNo);
+
+        const result = await request.query(query);
+        const agent = result.recordset[0];
+
+        if (!agent) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'Agent not found' 
+            });
+        }
+
+        // Convert SQL bit/boolean to JavaScript boolean
+        const isSupplier = agent.IsSupplier === true || agent.IsSupplier === 1;
+
+        res.status(200).json({
+            success: true,
+            isSupplier: isSupplier,
+            agent: {
+                agencyName: agent.Agency_Name,
+                fullName: `${agent.Fname} ${agent.Lname}`,
+                email: agent.Email,
+                mobile: agent.Mobile
+            }
+        });
+
+    } catch (error) {
+        console.error('Error fetching agent profile:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Internal server error fetching profile' 
+        });
+    }
+});
+
 //post inventory add new inventory api
 router.post('/inventory', authenticateJWT, async (req, res) => {
     const pool = await getDbPool();
@@ -192,12 +257,20 @@ router.post('/inventory', authenticateJWT, async (req, res) => {
             });
         }
 
-        // Get agent details
+        // Get agent details and check if supplier
         const agentDetails = await getAgentDetails(pool, userMobileNo);
         if (!agentDetails) {
             return res.status(404).json({
                 success: false,
                 message: 'Agent not found with the provided mobile number'
+            });
+        }
+
+        // Check if user is a supplier
+        if (agentDetails.IsSupplier !== 1) {
+            return res.status(403).json({
+                success: false,
+                message: 'Only suppliers can add inventory. Please contact support to get supplier access.'
             });
         }
 
@@ -1083,8 +1156,8 @@ router.delete('/inventory/:id', async (req, res) => {
             return res.status(404).json({ success: false, message: 'Inventory record not found or already deactivated.' });
         }
 
-        res.status(200).json({ 
-            success: true, 
+        res.status(200).json({
+            success: true,
             message: `Inventory ID ${id} has been deactivated successfully.`,
             data: {
                 id: id,
@@ -1096,10 +1169,10 @@ router.delete('/inventory/:id', async (req, res) => {
 
     } catch (error) {
         logger.error('Error deactivating record:', error);
-        res.status(500).json({ 
-            success: false, 
-            message: 'An error occurred while deactivating the record.', 
-            error: error.message 
+        res.status(500).json({
+            success: false,
+            message: 'An error occurred while deactivating the record.',
+            error: error.message
         });
     }
 });

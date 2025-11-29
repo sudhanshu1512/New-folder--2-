@@ -1,384 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FiFileText } from 'react-icons/fi';
-import axios from 'axios';
 import styles from './SupplierTicket.module.css';
 import Layout from '../Layout/Layout';
-
-// --- NEW Dummy Data (Reflecting the 20 new columns) ---
-const DUMMY_TICKETS = [
-  {
-    id: 1,
-    status: 'Confirmed',
-    orderId: 'ORD-2025-001',
-    invoiceNo: 'INV-A1B2',
-    supplierName: 'Indigo',
-    supplierMobile: '9988776655',
-    supplierEmail: 'indigo@supplier.com',
-    agencyName: 'Sky High Travels',
-    agencyMobile: '8877665544',
-    agencyEmail: 'contact@skyhigh.com',
-    paxMobile: '7766554433',
-    pnr: 'AB12CD',
-    ticketNo: 'TKT12345678',
-    paxName: 'Mr. Rohan Sharma',
-    airline: 'Indigo (6E)',
-    sector: 'DEL-BOM',
-    bookingDate: '2025-09-01',
-    journeyDate: '2025-09-10',
-    baseFare: 4500,
-    otherTax: 1200,
-    totalAmount: 5700,
-  },
-  {
-    id: 2,
-    status: 'Cancelled',
-    orderId: 'ORD-2025-002',
-    invoiceNo: 'INV-C3D4',
-    supplierName: 'Air India',
-    supplierMobile: '9123456789',
-    supplierEmail: 'airindia@supplier.com',
-    agencyName: 'Happy Journeys',
-    agencyMobile: '8234567890',
-    agencyEmail: 'info@happyjourneys.com',
-    paxMobile: '7345678901',
-    pnr: 'EF34GH',
-    ticketNo: 'TKT87654321',
-    paxName: 'Ms. Priya Mehta',
-    airline: 'Air India (AI)',
-    sector: 'BOM-DXB',
-    bookingDate: '2025-08-25',
-    journeyDate: '2025-09-12',
-    baseFare: 12000,
-    otherTax: 3500,
-    totalAmount: 15500,
-  },
-  {
-    id: 3,
-    status: 'Cancelled',
-    orderId: 'ORD-2025-002',
-    invoiceNo: 'INV-C3D4',
-    supplierName: 'Air India',
-    supplierMobile: '9123456789',
-    supplierEmail: 'airindia@supplier.com',
-    agencyName: 'Happy Journeys',
-    agencyMobile: '8234567890',
-    agencyEmail: 'info@happyjourneys.com',
-    paxMobile: '7345678901',
-    pnr: 'EF34GH',
-    ticketNo: 'TKT87654321',
-    paxName: 'Ms. Priya Mehta',
-    airline: 'Air India (AI)',
-    sector: 'BOM-DXB',
-    bookingDate: '2025-08-25',
-    journeyDate: '2025-09-12',
-    baseFare: 12000,
-    otherTax: 3500,
-    totalAmount: 15500,
-  },
-  {
-    id: 4,
-    status: 'Cancelled',
-    orderId: 'ORD-2025-002',
-    invoiceNo: 'INV-C3D4',
-    supplierName: 'Air India',
-    supplierMobile: '9123456789',
-    supplierEmail: 'airindia@supplier.com',
-    agencyName: 'Happy Journeys',
-    agencyMobile: '8234567890',
-    agencyEmail: 'info@happyjourneys.com',
-    paxMobile: '7345678901',
-    pnr: 'EF34GH',
-    ticketNo: 'TKT87654321',
-    paxName: 'Ms. Priya Mehta',
-    airline: 'Air India (AI)',
-    sector: 'BOM-DXB',
-    bookingDate: '2025-08-25',
-    journeyDate: '2025-09-12',
-    baseFare: 12000,
-    otherTax: 3500,
-    totalAmount: 15500,
-  },
-  {
-    id: 5,
-    status: 'Cancelled',
-    orderId: 'ORD-2025-002',
-    invoiceNo: 'INV-C3D4',
-    supplierName: 'Air India',
-    supplierMobile: '9123456789',
-    supplierEmail: 'airindia@supplier.com',
-    agencyName: 'Happy Journeys',
-    agencyMobile: '8234567890',
-    agencyEmail: 'info@happyjourneys.com',
-    paxMobile: '7345678901',
-    pnr: 'EF34GH',
-    ticketNo: 'TKT87654321',
-    paxName: 'Ms. Priya Mehta',
-    airline: 'Air India (AI)',
-    sector: 'BOM-DXB',
-    bookingDate: '2025-08-25',
-    journeyDate: '2025-09-12',
-    baseFare: 12000,
-    otherTax: 3500,
-    totalAmount: 15500,
-  },
-  {
-    id: 6,
-    status: 'Cancelled',
-    orderId: 'ORD-2025-002',
-    invoiceNo: 'INV-C3D4',
-    supplierName: 'Air India',
-    supplierMobile: '9123456789',
-    supplierEmail: 'airindia@supplier.com',
-    agencyName: 'Happy Journeys',
-    agencyMobile: '8234567890',
-    agencyEmail: 'info@happyjourneys.com',
-    paxMobile: '7345678901',
-    pnr: 'EF34GH',
-    ticketNo: 'TKT87654321',
-    paxName: 'Ms. Priya Mehta',
-    airline: 'Air India (AI)',
-    sector: 'BOM-DXB',
-    bookingDate: '2025-08-25',
-    journeyDate: '2025-09-12',
-    baseFare: 12000,
-    otherTax: 3500,
-    totalAmount: 15500,
-  },
-  {
-    id: 7,
-    status: 'Cancelled',
-    orderId: 'ORD-2025-002',
-    invoiceNo: 'INV-C3D4',
-    supplierName: 'Air India',
-    supplierMobile: '9123456789',
-    supplierEmail: 'airindia@supplier.com',
-    agencyName: 'Happy Journeys',
-    agencyMobile: '8234567890',
-    agencyEmail: 'info@happyjourneys.com',
-    paxMobile: '7345678901',
-    pnr: 'EF34GH',
-    ticketNo: 'TKT87654321',
-    paxName: 'Ms. Priya Mehta',
-    airline: 'Air India (AI)',
-    sector: 'BOM-DXB',
-    bookingDate: '2025-08-25',
-    journeyDate: '2025-09-12',
-    baseFare: 12000,
-    otherTax: 3500,
-    totalAmount: 15500,
-  },
-  {
-    id: 8,
-    status: 'Cancelled',
-    orderId: 'ORD-2025-002',
-    invoiceNo: 'INV-C3D4',
-    supplierName: 'Air India',
-    supplierMobile: '9123456789',
-    supplierEmail: 'airindia@supplier.com',
-    agencyName: 'Happy Journeys',
-    agencyMobile: '8234567890',
-    agencyEmail: 'info@happyjourneys.com',
-    paxMobile: '7345678901',
-    pnr: 'EF34GH',
-    ticketNo: 'TKT87654321',
-    paxName: 'Ms. Priya Mehta',
-    airline: 'Air India (AI)',
-    sector: 'BOM-DXB',
-    bookingDate: '2025-08-25',
-    journeyDate: '2025-09-12',
-    baseFare: 12000,
-    otherTax: 3500,
-    totalAmount: 15500,
-  },
-  {
-    id: 9,
-    status: 'Cancelled',
-    orderId: 'ORD-2025-002',
-    invoiceNo: 'INV-C3D4',
-    supplierName: 'Air India',
-    supplierMobile: '9123456789',
-    supplierEmail: 'airindia@supplier.com',
-    agencyName: 'Happy Journeys',
-    agencyMobile: '8234567890',
-    agencyEmail: 'info@happyjourneys.com',
-    paxMobile: '7345678901',
-    pnr: 'EF34GH',
-    ticketNo: 'TKT87654321',
-    paxName: 'Ms. Priya Mehta',
-    airline: 'Air India (AI)',
-    sector: 'BOM-DXB',
-    bookingDate: '2025-08-25',
-    journeyDate: '2025-09-12',
-    baseFare: 12000,
-    otherTax: 3500,
-    totalAmount: 15500,
-  },
-  {
-    id: 10,
-    status: 'Cancelled',
-    orderId: 'ORD-2025-002',
-    invoiceNo: 'INV-C3D4',
-    supplierName: 'Air India',
-    supplierMobile: '9123456789',
-    supplierEmail: 'airindia@supplier.com',
-    agencyName: 'Happy Journeys',
-    agencyMobile: '8234567890',
-    agencyEmail: 'info@happyjourneys.com',
-    paxMobile: '7345678901',
-    pnr: 'EF34GH',
-    ticketNo: 'TKT87654321',
-    paxName: 'Ms. Priya Mehta',
-    airline: 'Air India (AI)',
-    sector: 'BOM-DXB',
-    bookingDate: '2025-08-25',
-    journeyDate: '2025-09-12',
-    baseFare: 12000,
-    otherTax: 3500,
-    totalAmount: 15500,
-  },
-  {
-    id: 11,
-    status: 'Cancelled',
-    orderId: 'ORD-2025-002',
-    invoiceNo: 'INV-C3D4',
-    supplierName: 'Air India',
-    supplierMobile: '9123456789',
-    supplierEmail: 'airindia@supplier.com',
-    agencyName: 'Happy Journeys',
-    agencyMobile: '8234567890',
-    agencyEmail: 'info@happyjourneys.com',
-    paxMobile: '7345678901',
-    pnr: 'EF34GH',
-    ticketNo: 'TKT87654321',
-    paxName: 'Ms. Priya Mehta',
-    airline: 'Air India (AI)',
-    sector: 'BOM-DXB',
-    bookingDate: '2025-08-25',
-    journeyDate: '2025-09-12',
-    baseFare: 12000,
-    otherTax: 3500,
-    totalAmount: 15500,
-  },
-  {
-    id: 12,
-    status: 'Cancelled',
-    orderId: 'ORD-2025-002',
-    invoiceNo: 'INV-C3D4',
-    supplierName: 'Air India',
-    supplierMobile: '9123456789',
-    supplierEmail: 'airindia@supplier.com',
-    agencyName: 'Happy Journeys',
-    agencyMobile: '8234567890',
-    agencyEmail: 'info@happyjourneys.com',
-    paxMobile: '7345678901',
-    pnr: 'EF34GH',
-    ticketNo: 'TKT87654321',
-    paxName: 'Ms. Priya Mehta',
-    airline: 'Air India (AI)',
-    sector: 'BOM-DXB',
-    bookingDate: '2025-08-25',
-    journeyDate: '2025-09-12',
-    baseFare: 12000,
-    otherTax: 3500,
-    totalAmount: 15500,
-  },
-  {
-    id: 13,
-    status: 'Cancelled',
-    orderId: 'ORD-2025-002',
-    invoiceNo: 'INV-C3D4',
-    supplierName: 'Air India',
-    supplierMobile: '9123456789',
-    supplierEmail: 'airindia@supplier.com',
-    agencyName: 'Happy Journeys',
-    agencyMobile: '8234567890',
-    agencyEmail: 'info@happyjourneys.com',
-    paxMobile: '7345678901',
-    pnr: 'EF34GH',
-    ticketNo: 'TKT87654321',
-    paxName: 'Ms. Priya Mehta',
-    airline: 'Air India (AI)',
-    sector: 'BOM-DXB',
-    bookingDate: '2025-08-25',
-    journeyDate: '2025-09-12',
-    baseFare: 12000,
-    otherTax: 3500,
-    totalAmount: 15500,
-  },
-  {
-    id: 14,
-    status: 'Cancelled',
-    orderId: 'ORD-2025-002',
-    invoiceNo: 'INV-C3D4',
-    supplierName: 'Air India',
-    supplierMobile: '9123456789',
-    supplierEmail: 'airindia@supplier.com',
-    agencyName: 'Happy Journeys',
-    agencyMobile: '8234567890',
-    agencyEmail: 'info@happyjourneys.com',
-    paxMobile: '7345678901',
-    pnr: 'EF34GH',
-    ticketNo: 'TKT87654321',
-    paxName: 'Ms. Priya Mehta',
-    airline: 'Air India (AI)',
-    sector: 'BOM-DXB',
-    bookingDate: '2025-08-25',
-    journeyDate: '2025-09-12',
-    baseFare: 12000,
-    otherTax: 3500,
-    totalAmount: 15500,
-  },
-  {
-    id: 15,
-    status: 'Cancelled',
-    orderId: 'ORD-2025-002',
-    invoiceNo: 'INV-C3D4',
-    supplierName: 'Air India',
-    supplierMobile: '9123456789',
-    supplierEmail: 'airindia@supplier.com',
-    agencyName: 'Happy Journeys',
-    agencyMobile: '8234567890',
-    agencyEmail: 'info@happyjourneys.com',
-    paxMobile: '7345678901',
-    pnr: 'EF34GH',
-    ticketNo: 'TKT87654321',
-    paxName: 'Ms. Priya Mehta',
-    airline: 'Air India (AI)',
-    sector: 'BOM-DXB',
-    bookingDate: '2025-08-25',
-    journeyDate: '2025-09-12',
-    baseFare: 12000,
-    otherTax: 3500,
-    totalAmount: 15500,
-  },
-  {
-    id: 16,
-    status: 'Cancelled',
-    orderId: 'ORD-2025-002',
-    invoiceNo: 'INV-C3D4',
-    supplierName: 'Air India',
-    supplierMobile: '9123456789',
-    supplierEmail: 'airindia@supplier.com',
-    agencyName: 'Happy Journeys',
-    agencyMobile: '8234567890',
-    agencyEmail: 'info@happyjourneys.com',
-    paxMobile: '7345678901',
-    pnr: 'EF34GH',
-    ticketNo: 'TKT87654321',
-    paxName: 'Ms. Priya Mehta',
-    airline: 'Air India (AI)',
-    sector: 'BOM-DXB',
-    bookingDate: '2025-08-25',
-    journeyDate: '2025-09-12',
-    baseFare: 12000,
-    otherTax: 3500,
-    totalAmount: 15500,
-  },
-  // ... add more dummy data here to test pagination if needed
-];
+// Using your configured axios instance which likely handles Auth headers
+import api from "../../lib/api";
 
 export default function SupplierTicket() {
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState({
+    supplier: '',
+    fromDate: '',
+    toDate: '',
+    pnr: '',
+    orderId: '',
+    paxMobile: '',
+    agencyName: '',
+    ticketNo: '',
+    airline: '',
+    status: ''
+  });
+
   const [tickets, setTickets] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -386,9 +26,11 @@ export default function SupplierTicket() {
   // --- PAGINATION STATE ---
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  // ------------------------
 
-  // --- NEW: Helper to open picker on click ---
+  // --- Initial Load ---
+  useEffect(() => {
+  }, []);
+
   const handleInputClick = (e) => {
     try {
       if (typeof e.target.showPicker === 'function') {
@@ -404,19 +46,73 @@ export default function SupplierTicket() {
     setFilters(prevFilters => ({ ...prevFilters, [name]: value }));
   };
 
-  const handleSearch = async () => {
+  // --- CORE API FETCH FUNCTION ---
+  const fetchTickets = async () => {
     setIsLoading(true);
     setError(null);
+    setTickets([]);
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setTickets(DUMMY_TICKETS);
-      setCurrentPage(1); // Reset to page 1 on new search
+      // Prepare Query Params
+      const params = {};
+      if (filters.orderId) params.orderId = filters.orderId;
+      if (filters.fromDate) params.fromDate = filters.fromDate;
+      if (filters.toDate) params.toDate = filters.toDate;
+
+      // Make the API Call
+      const response = await api.get('/flight-bookings', { params });
+
+      if (response.data.success) {
+        const mappedData = response.data.data.map((item, index) => ({
+          id: item.OrderId || index, // Unique key
+          status: item.Status,
+          orderId: item.OrderId,
+          invoiceNo: item.Invoice,
+          supplierName: item['Supplier Name'],
+          supplierMobile: item['Supplier Mob'],
+          supplierEmail: item['Supplier Mail'],
+          agencyName: item['Agency Name'],
+          agencyMobile: item['Agency Mobile'],
+          agencyEmail: item['Agency Mail'],
+          paxMobile: item['Pax Mobile'],
+          pnr: item.PNR,
+          ticketNo: item.Ticket,
+          paxName: item['Pax Name'],
+          airline: item.Airline,
+          sector: item.Sector,
+          bookingDate: item['Booking Date'],
+          journeyDate: item['Journey Date'],
+          baseFare: item['Base Fare'],
+          otherTax: item['Other Tax'],
+          totalAmount: item['Total Amount']
+        }));
+
+        const filteredResult = mappedData.filter(ticket => {
+          return (
+            (!filters.pnr || ticket.pnr?.toLowerCase().includes(filters.pnr.toLowerCase())) &&
+            (!filters.paxMobile || ticket.paxMobile?.includes(filters.paxMobile)) &&
+            (!filters.ticketNo || ticket.ticketNo?.includes(filters.ticketNo)) &&
+            (!filters.status || ticket.status?.toLowerCase() === filters.status.toLowerCase()) &&
+            (!filters.airline || ticket.airline?.toLowerCase().includes(filters.airline.toLowerCase())) &&
+            (!filters.supplier || ticket.supplierName?.toLowerCase().includes(filters.supplier.toLowerCase())) &&
+            (!filters.agencyName || ticket.agencyName?.toLowerCase().includes(filters.agencyName.toLowerCase()))
+          );
+        });
+
+        setTickets(filteredResult);
+        setCurrentPage(1);
+      }
     } catch (err) {
-      setError("Could not fetch data.");
-      setTickets([]);
+      console.error("Fetch error:", err);
+      setError("Failed to fetch booking details.");
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    fetchTickets();
   };
 
   const handleExport = () => {
@@ -425,70 +121,44 @@ export default function SupplierTicket() {
       return;
     }
 
-    // Define all column headers
     const headers = [
-      'STATUS',
-      'ORDER ID',
-      'INVOICE NO',
-      'SUPPLIER NAME',
-      'SUPPLIER MOBILE',
-      'SUPPLIER EMAIL',
-      'AGENCY NAME',
-      'AGENCY MOBILE',
-      'AGENCY EMAIL',
-      'PAX MOBILE',
-      'PNR',
-      'TICKET NO',
-      'PAX NAME',
-      'AIRLINE',
-      'SECTOR',
-      'BOOKING DATE',
-      'JOURNEY DATE',
-      'BASE FARE',
-      'OTHER TAX',
-      'TOTAL AMOUNT'
+      'STATUS', 'ORDER ID', 'INVOICE NO', 'SUPPLIER NAME', 'SUPPLIER MOBILE', 'SUPPLIER EMAIL',
+      'AGENCY NAME', 'AGENCY MOBILE', 'AGENCY EMAIL', 'PAX MOBILE', 'PNR', 'TICKET NO',
+      'PAX NAME', 'AIRLINE', 'SECTOR', 'BOOKING DATE', 'JOURNEY DATE', 'BASE FARE', 'OTHER TAX', 'TOTAL AMOUNT'
     ];
 
-    // Create CSV rows
     const csvRows = [
-      headers.join(','), // Header row
+      headers.join(','),
       ...tickets.map(ticket => [
-        `"${ticket.status}"`,
-        `"${ticket.orderId}"`,
-        `"${ticket.invoiceNo}"`,
-        `"${ticket.supplierName}"`,
-        `"${ticket.supplierMobile}"`,
-        `"${ticket.supplierEmail}"`,
-        `"${ticket.agencyName}"`,
-        `"${ticket.agencyMobile}"`,
-        `"${ticket.agencyEmail}"`,
-        `"${ticket.paxMobile}"`,
-        `"${ticket.pnr}"`,
-        `"${ticket.ticketNo}"`,
-        `"${ticket.paxName}"`,
-        `"${ticket.airline}"`,
-        `"${ticket.sector}"`,
-        `"${new Date(ticket.bookingDate).toLocaleDateString()}"`,
-        `"${new Date(ticket.journeyDate).toLocaleDateString()}"`,
-        `"₹${ticket.baseFare?.toLocaleString() || '0'}"`,
-        `"₹${ticket.otherTax?.toLocaleString() || '0'}"`,
-        `"₹${ticket.totalAmount?.toLocaleString() || '0'}"`
-      ].map(field => field.replace(/"/g, '""')).join(',')) // Escape quotes in data
+        `"${ticket.status || ''}"`,
+        `"${ticket.orderId || ''}"`,
+        `"${ticket.invoiceNo || ''}"`,
+        `"${ticket.supplierName || ''}"`,
+        `"${ticket.supplierMobile || ''}"`,
+        `"${ticket.supplierEmail || ''}"`,
+        `"${ticket.agencyName || ''}"`,
+        `"${ticket.agencyMobile || ''}"`,
+        `"${ticket.agencyEmail || ''}"`,
+        `"${ticket.paxMobile || ''}"`,
+        `"${ticket.pnr || ''}"`,
+        `"${ticket.ticketNo || ''}"`,
+        `"${ticket.paxName || ''}"`,
+        `"${ticket.airline || ''}"`,
+        `"${ticket.sector || ''}"`,
+        `"${ticket.bookingDate ? new Date(ticket.bookingDate).toLocaleDateString() : ''}"`,
+        `"${ticket.journeyDate ? new Date(ticket.journeyDate).toLocaleDateString() : ''}"`,
+        `"${ticket.baseFare || 0}"`,
+        `"${ticket.otherTax || 0}"`,
+        `"${ticket.totalAmount || 0}"`
+      ].join(','))
     ];
 
-    // Create CSV string
     const csvString = csvRows.join('\n');
-
-    // Create a Blob with the CSV data
     const blob = new Blob(["\uFEFF" + csvString], { type: 'text/csv;charset=utf-8;' });
-
-    // Create a download link
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', `supplier-tickets-${new Date().toISOString().split('T')[0]}.csv`);
-
-    // Trigger the download
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -505,55 +175,56 @@ export default function SupplierTicket() {
       setCurrentPage(pageNumber);
     }
   };
-  // ------------------------
 
   return (
-
     <Layout>
       <div className={styles.ticketReportContainer}>
         <h2 className={styles.pageTitle}><FiFileText className={styles.icon} /> Supplier Ticket Report</h2>
 
-        {/* --- The Search Form Card --- */}
+        {/* --- Search Form --- */}
         <div className={styles.searchCard}>
           <div className={styles.formGrid}>
-            <div className={styles.formGroup}><label>Supplier</label><select name="supplier" value={filters.supplier} onChange={handleChange}><option value="">Select supplier</option><option value="Indigo">Indigo</option></select></div>
-
-            {/* --- UPDATED: Added onClick and cursor style --- */}
             <div className={styles.formGroup}>
-              <label>From</label>
-              <input
-                type="date"
-                name="fromDate"
-                value={filters.fromDate}
-                onChange={handleChange}
-                onClick={handleInputClick}
-                style={{ cursor: 'pointer' }}
-              />
+              <label>Supplier</label>
+              {/* Note: You might want to populate this select dynamically from an API later */}
+              <select name="supplier" value={filters.supplier} onChange={handleChange}>
+                <option value="">Select supplier</option>
+                <option value="Indigo">Indigo</option>
+                <option value="Air India">Air India</option>
+                <option value="SpiceJet">SpiceJet</option>
+              </select>
             </div>
 
-            {/* --- UPDATED: Added onClick and cursor style --- */}
+            <div className={styles.formGroup}>
+              <label>From</label>
+              <input type="date" name="fromDate" value={filters.fromDate} onChange={handleChange} onClick={handleInputClick} style={{ cursor: 'pointer' }} />
+            </div>
+
             <div className={styles.formGroup}>
               <label>To</label>
-              <input
-                type="date"
-                name="toDate"
-                value={filters.toDate}
-                onChange={handleChange}
-                onClick={handleInputClick}
-                style={{ cursor: 'pointer' }}
-              />
+              <input type="date" name="toDate" value={filters.toDate} onChange={handleChange} onClick={handleInputClick} style={{ cursor: 'pointer' }} />
             </div>
 
             <div className={styles.formGroup}><label>PNR</label><input type="text" name="pnr" placeholder="PNR..." value={filters.pnr} onChange={handleChange} /></div>
             <div className={styles.formGroup}><label>Order Id</label><input type="text" name="orderId" placeholder="Orderid.." value={filters.orderId} onChange={handleChange} /></div>
             <div className={styles.formGroup}><label>Pax Mobile</label><input type="text" name="paxMobile" placeholder="Pax Mobile.." value={filters.paxMobile} onChange={handleChange} /></div>
-            <div className={styles.formGroup}><label>Agency Name</label><select name="agencyName" value={filters.agencyName} onChange={handleChange}><option value="">Select Agency</option><option value="Sky Travels">Sky Travels</option></select></div>
+            <div className={styles.formGroup}><label>Agency Name</label><input type="text" name="agencyName" placeholder="Agency Name" value={filters.agencyName} onChange={handleChange} /></div>
             <div className={styles.formGroup}><label>Ticket No.</label><input type="text" name="ticketNo" placeholder="TicketNo.." value={filters.ticketNo} onChange={handleChange} /></div>
-            <div className={styles.formGroup}><label>Airline</label><select name="airline" value={filters.airline} onChange={handleChange}><option value="">Select Airline</option><option value="6E">Indigo (6E)</option></select></div>
-            <div className={styles.formGroup}><label>Status</label><select name="status" value={filters.status} onChange={handleChange}><option value="">Select</option><option value="Confirmed">Confirmed</option></select></div>
+            <div className={styles.formGroup}><label>Airline</label><input type="text" name="airline" placeholder="Airline" value={filters.airline} onChange={handleChange} /></div>
+            <div className={styles.formGroup}>
+              <label>Status</label>
+              <select name="status" value={filters.status} onChange={handleChange}>
+                <option value="">Select</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Cancelled">Cancelled</option>
+                <option value="On Hold">On Hold</option>
+              </select>
+            </div>
           </div>
           <div className={styles.buttonGroup}>
-            <button className={styles.searchButton} onClick={handleSearch} disabled={isLoading}>{isLoading ? 'Searching...' : 'SEARCH RESULT'}</button>
+            <button className={styles.searchButton} onClick={handleSearch} disabled={isLoading}>
+              {isLoading ? 'Searching...' : 'SEARCH RESULT'}
+            </button>
             <button className={styles.exportButton} onClick={handleExport}>EXPORT</button>
           </div>
         </div>
@@ -587,12 +258,13 @@ export default function SupplierTicket() {
             </thead>
             <tbody>
               {isLoading ? (
-                <tr><td colSpan="20" className={styles.loadingCell}>Loading...</td></tr>
+                <tr><td colSpan="20" className={styles.loadingCell}>Loading data...</td></tr>
+              ) : error ? (
+                <tr><td colSpan="20" style={{ textAlign: 'center', color: 'red', padding: '20px' }}>{error}</td></tr>
               ) : tickets.length > 0 ? (
-                // --- PAGINATION: Use currentItems here ---
                 currentItems.map((ticket) => (
                   <tr key={ticket.id}>
-                    <td><span className={`${styles.statusBadge} ${styles[`status${ticket.status}`]}`}>{ticket.status}</span></td>
+                    <td><span className={`${styles.statusBadge} ${styles[`status${ticket.status}`] || ''}`}>{ticket.status}</span></td>
                     <td>{ticket.orderId}</td>
                     <td>{ticket.invoiceNo}</td>
                     <td>{ticket.supplierName}</td>
@@ -607,11 +279,12 @@ export default function SupplierTicket() {
                     <td>{ticket.paxName}</td>
                     <td>{ticket.airline}</td>
                     <td>{ticket.sector}</td>
-                    <td>{ticket.bookingDate}</td>
-                    <td>{ticket.journeyDate}</td>
-                    <td className={styles.currency}>₹{ticket.baseFare.toLocaleString('en-IN')}</td>
-                    <td className={styles.currency}>₹{ticket.otherTax.toLocaleString('en-IN')}</td>
-                    <td className={`${styles.currency} ${styles.total}`}>₹{ticket.totalAmount.toLocaleString('en-IN')}</td>
+                    {/* Format Dates safely */}
+                    <td>{ticket.bookingDate ? new Date(ticket.bookingDate).toLocaleDateString('en-GB') : '-'}</td>
+                    <td>{ticket.journeyDate ? new Date(ticket.journeyDate).toLocaleDateString('en-GB') : '-'}</td>
+                    <td className={styles.currency}>₹{ticket.baseFare?.toLocaleString('en-IN') || 0}</td>
+                    <td className={styles.currency}>₹{ticket.otherTax?.toLocaleString('en-IN') || 0}</td>
+                    <td className={`${styles.currency} ${styles.total}`}>₹{ticket.totalAmount?.toLocaleString('en-IN') || 0}</td>
                   </tr>
                 ))
               ) : (
@@ -624,14 +297,7 @@ export default function SupplierTicket() {
 
           {/* --- PAGINATION CONTROLS --- */}
           {tickets.length > itemsPerPage && (
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: '20px',
-              padding: '10px',
-              gap: '15px'
-            }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '20px', padding: '10px', gap: '15px' }}>
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
@@ -669,9 +335,7 @@ export default function SupplierTicket() {
               </button>
             </div>
           )}
-
         </div>
-
       </div>
     </Layout>
   );

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./Navbar.css";
-import api from "../../lib/api";
 import { Link, useNavigate } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
@@ -59,13 +58,14 @@ const Navbar = () => {
  useEffect(() => {
   const fetchBalance = async () => {
     try {
-      const response = await api.get('auth/balance', {
+      const response = await fetch('https://new-folder-2-4ub8.onrender.com/api/auth/balance', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       });
-      if (response.data && response.data.success) {
-        setBalance(response.data.balance);
+      const data = await response.json();
+      if (data.success) {
+        setBalance(data.balance);
       }
     } catch (error) {
       console.error('Error fetching balance:', error);

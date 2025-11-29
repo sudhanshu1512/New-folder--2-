@@ -60,35 +60,31 @@ function Dashboard() {
     {
       icon: <FaUsers />,
       value: userCount.toString(),
-      percent: "+55%",
       label: "Users Active",
       color: "#ff6a00",
     },
     {
       icon: <FaBoxes />,
       value: totalInventory.toString(),
-      percent: "+32%",
       label: "Total Inventory",
       color: "#2a5d4f",
     },
     {
       icon: <FaTicketAlt />,
       value: totalBookings.toString(),
-      percent: "+15%",
       label: "Total Bookings",
       color: "#0077ff",
     },
     {
       icon: <FaBook />,
       value: "₹4.5M",
-      percent: "+40%",
       label: "Ledger Balance",
       color: "#e91e63",
     },
   ];
 
   const recentActivity = [
-    newestSupplier ? `New user registered: ${newestSupplier}` : "New user registered: Loading...",
+    newestSupplier ? `New ticket booked for: ${newestSupplier}` : "New user registered: Loading...",
     `Inventory updated: + ${todayInventory} items`,
     `Tickets Booked Today: + ${todayBookings} tickets`,
     "Ledger credited with ₹50,000",

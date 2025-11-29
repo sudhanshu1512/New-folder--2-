@@ -283,7 +283,7 @@ router.post('/quote', authenticateJWT, async (req, res) => {
             .input('AdtBfare', sql.NVarChar(255), String(flight.Basicfare))
             .input('AdtTax', sql.NVarChar(255), String(AdltTax))
             .input('ChdFare', sql.NVarChar(255), String(flight.ChdFar) || '0')
-            .input('ChdBfare', sql.NVarChar(255), '0')
+            .input('ChdBfare', sql.NVarChar(255), String(flight.Basicfare * 0.75) || '0')
             .input('ChdTax', sql.NVarChar(255), '0')
             .input('InfFare', sql.NVarChar(255), String(flight.InfFare) || '0')
             .input('InfBfare', sql.NVarChar(255), String(flight.infBfare) || '0')
@@ -303,7 +303,7 @@ router.post('/quote', authenticateJWT, async (req, res) => {
             .input('Tot_Dur', sql.NVarChar(255), flight.flightduration)
             .input('TripType', sql.NVarChar(255), flight.Triptype)
             .input('EQ', sql.VarChar(255), '0')
-            .input('Stops', sql.VarChar(255), `${flight.Connect}- stops`)
+            .input('Stops', sql.VarChar(255), flight.Connect ? '1 - Stops' : '0 - Stops')
 
             // --- 3. INSERT CALCULATED TRIP TYPE ('I' or 'D') ---
             .input('Trip', sql.VarChar(255), tripScopeChar)
@@ -373,7 +373,7 @@ router.post('/quote', authenticateJWT, async (req, res) => {
             .input('OldTrackId', sql.VarChar(50), '0')
             .input('AirlineRemark', sql.VarChar(255), '1PC')
             .input('SearchId', sql.VarChar(100), searchId)
-            .input('PNRId', sql.VarChar(100), pnrId)
+            .input('PNRId', sql.VarChar(100), flight.fareBasis)
             .input('TicketId', sql.VarChar(100), ticketId)
             .input('IsBagFare', sql.Bit, 0)
             .input('IsSMEFare', sql.Bit, 0)
@@ -474,6 +474,9 @@ router.get('/quote/:quoteId', async (req, res) => {
                 vc: quoteData.name,
                 trip: quoteData.trip,
                 tripType: quoteData.tripType,
+                stops: quoteData.stops,
+                sector: quoteData.sector
+                
             },
             priceBreakdown: {
                 basePrice: parseFloat(quoteData.quote_base_price),
@@ -485,11 +488,11 @@ router.get('/quote/:quoteId', async (req, res) => {
                 },
                 children: {
                     count: quoteData.child_count,
-                    total: quoteData.child_count * parseFloat(quoteData.adultBaseFare * 0.75)
+                    total: quoteData.child_count * parseInt (quoteData.childFare)
                 },
                 infants: {
                     count: quoteData.infant_count,
-                    total: quoteData.infant_count * parseFloat(quoteData.infantFare)
+                    total: quoteData.infant_count * quoteData.infantFare
                 },
                 taxes: quoteData.totalTaxes,
                 otherCharges: parseInt(quoteData.Markup) + parseFloat(quoteData.adminMarkup),

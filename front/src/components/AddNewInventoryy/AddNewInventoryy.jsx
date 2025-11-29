@@ -50,6 +50,25 @@ const AddNewInventory = () => {
   const [selectedAirline, setSelectedAirline] = useState(null);
   const formRef = useRef(null);
 
+  // Add inside AddNewInventory component
+  useEffect(() => {
+    const checkPermission = async () => {
+      try {
+        const response = await api.get('/agent/profile');
+
+        if (!response.data.isSupplier) {
+          toast.error("Access Denied: You must be a Supplier to view this page.");
+          navigate('/flight-search'); // Redirect immediately
+        }
+      } catch (error) {
+        console.error("Error checking permissions", error);
+        // Optional: Redirect on error too, depending on security strictness
+      }
+    };
+
+    checkPermission();
+  }, [navigate]);
+
   // Definitive styles for react-select component to match other inputs
   const customSelectStyles = {
     control: (provided) => ({
@@ -467,33 +486,31 @@ const AddNewInventory = () => {
   // Update the handleSubmit function
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Form submitted');
+
+    // Prevent multiple submissions
+    if (isSubmitting) {
+      console.log('Already submitting, returning');
+      return;
+    }
+
+    // Validate form data
     const validationErrors = validateStep();
-
     if (Object.keys(validationErrors).length > 0) {
+      console.log('Validation errors:', validationErrors);
       setErrors(validationErrors);
-      // Scroll to the first error
-      const firstErrorField = Object.keys(validationErrors)[0];
-      const element = document.getElementsByName(firstErrorField)[0];
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
       return;
     }
 
-    if (step < 4) {
-      setStep(step + 1);
-      return;
-    }
+    console.log('Starting form submission');
+    setIsSubmitting(true);
+    let toastId; // Define toastId in the outer scope
 
-    // If it's the final step (step 4), submit the form
-    let toastId; // Move the toastId declaration here
     try {
-      setIsSubmitting(true);
-
       // Show loading toast
-      toastId = toast.loading('Saving inventory...');
+      console.log('Showing loading toast');
+      toastId = toast.loading('Saving inventory...'); // Assign value here
 
-      // Rest of your existing code remains the same...
       const formDataToSend = {
         ...formData,
         basicFare: parseFloat(formData.basicFare) || 0,
@@ -509,66 +526,88 @@ const AddNewInventory = () => {
         toAirport: airportData.to
       };
 
+      console.log('Sending data to server:', formDataToSend);
+
       // Submit the form data
       const response = await api.post('/inventory', formDataToSend);
+      console.log('Server response:', response.data);
 
-      if (response.data.success) {
-        // Show success message
+      // Dismiss the loading toast
+      console.log('Dismissing loading toast');
+      toast.dismiss(toastId);
+
+      if (response.data && response.data.success) {
+        console.log('Showing success toast');
         toast.success('Inventory added successfully!', {
-          id: toastId,
           duration: 2000,
+          position: 'top-right',
+          style: {
+            background: '#4BB543',
+            color: '#fff',
+            padding: '16px',
+            borderRadius: '4px',
+          },
         });
 
-        // Reset form and redirect after a short delay
+        // Wait for the toast to show before navigating
+        console.log('Waiting before navigation');
         setTimeout(() => {
-          navigate('/inventory', {
-            state: { refresh: true }
-          });
+          console.log('Navigating to /inventory');
+          navigate('/inventory');
         }, 1500);
       } else {
-        // Show error message from API
-        toast.error(response.data.message || 'Failed to add inventory. Please try again.', {
-          id: toastId,
-          duration: 4000,
-        });
+        throw new Error(response.data?.message || 'Failed to add inventory');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
 
-      // Handle different types of errors
-      let errorMessage = 'An error occurred while saving the inventory.';
-      let fieldError = null;
-
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        errorMessage = error.response.data?.message || errorMessage;
-
-        // Handle validation errors
-        if (error.response.status === 400 && error.response.data?.field) {
-          fieldError = error.response.data.field;
-          setErrors(prev => ({
-            ...prev,
-            [fieldError]: error.response.data.message || `Invalid ${fieldError}`
-          }));
-        }
-      } else if (error.request) {
-        // The request was made but no response was received
-        errorMessage = 'No response from server. Please check your connection.';
+      // Dismiss loading toast if it exists
+      if (toastId) {
+        toast.dismiss(toastId);
       }
 
-      // Show error toast
-      toast.error(errorMessage, {
-        id: toastId, // Now toastId is accessible here
-        duration: 5000,
+      // Handle different types of errors
+      let errorMessage = 'Failed to add inventory. Please try again.';
+      let shouldRedirect = false;
+
+      if (error.response) {
+        console.error('Server responded with error:', error.response.data);
+        errorMessage = error.response.data?.message || errorMessage;
+
+        // Handle 403 Forbidden specifically
+        if (error.response.status === 403) {
+          errorMessage = 'You do not have permission to add inventory. Please contact support.';
+          shouldRedirect = true;
+        }
+
+        if (error.response.data?.errors) {
+          console.log('Field errors:', error.response.data.errors);
+          setErrors(error.response.data.errors);
+        }
+      } else if (error.request) {
+        console.error('No response received:', error.request);
+        errorMessage = 'No response from server. Please check your connection.';
+      } else {
+        console.error('Error setting up request:', error.message);
+      }
+
+      console.log('Showing error toast:', errorMessage);
+      const errorToast = toast.error(errorMessage, {
+        duration: 4000,
+        position: 'top-right',
+        style: {
+          background: '#ff4444',
+          color: '#fff',
+          padding: '16px',
+          borderRadius: '4px',
+        },
       });
 
-      // Scroll to the field with error if available
-      if (fieldError) {
-        const element = document.getElementsByName(fieldError)[0];
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
+      // Redirect after showing error toast if needed
+      if (shouldRedirect) {
+        setTimeout(() => {
+          navigate('/inventory');
+        }, 2000);
       }
     } finally {
       setIsSubmitting(false);
@@ -801,8 +840,19 @@ const AddNewInventory = () => {
               {step > 1 && (<button type="button" className={Styles.btnPrev} onClick={handlePrev}>Previous</button>)}
               {step < 4 && (<button type="button" className={Styles.btnNext} onClick={handleNext}>Next <FaArrowRight /></button>)}
               {step === 4 && (
-                <button type="submit" className={Styles.btnSubmit} disabled={isSubmitting}>
-                  {isSubmitting ? <><FaSpinner className={Styles.spinner} /> Saving...</> : 'Save Inventory'}
+                <button
+                  type="submit"
+                  className={`${Styles.btnSubmit} ${isSubmitting ? Styles.submitting : ''}`}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <FaSpinner className={Styles.spinner} />
+                      Processing...
+                    </>
+                  ) : (
+                    'Submit Inventory'
+                  )}
                 </button>
               )}
             </div>

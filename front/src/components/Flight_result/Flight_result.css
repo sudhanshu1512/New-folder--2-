@@ -18,6 +18,7 @@
     z-index: 100;
 }
 
+/* Added flex-shrink to prevent button squashing */
 .backButton {
     background: white;
     border: 1px solid #e2e8f0;
@@ -29,6 +30,7 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s;
+    flex-shrink: 0;
 }
 
 .backButton:hover {
@@ -41,13 +43,13 @@
     font-weight: 600;
     color: white;
     margin: 0;
+    text-align: center;
+    /* Center text on small screens */
 }
 
 .resultsHeader .placeholder {
     width: 40px;
 }
-
-/* To balance the back button */
 
 .resultsContainer {
     padding: 2rem;
@@ -56,12 +58,15 @@
     width: 100%;
 }
 
+/* Responsive Filter Bar */
 .filterBar {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 2rem;
+    flex-wrap: wrap;
+    /* Allow wrapping on small screens */
 }
 
 .dateInput {
@@ -82,15 +87,19 @@
     align-items: center;
     gap: 0.5rem;
     transition: background-color 0.2s;
+    white-space: nowrap;
+    /* Prevent text wrap */
 }
 
 .filterButton:hover {
     background: #4A5568;
 }
 
+/* --- FLIGHT CARD LAYOUT --- */
 .flightCard {
     display: grid;
-    grid-template-columns: 120px 1fr 1fr 1fr auto;
+    /* Grid Logic: Logo(150px) | Middle(Flexible) | End(Auto Width) */
+    grid-template-columns: 150px 1fr auto;
     align-items: center;
     gap: 1.5rem;
     padding: 1.5rem;
@@ -100,6 +109,7 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
     transition: all 0.2s ease-in-out;
     border: 1px solid #e2e8f0;
+    min-height: 140px;
 }
 
 .flightCard:hover {
@@ -108,20 +118,27 @@
 }
 
 .airlineInfo {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
 .airlineInfo img {
-    width: 100px;
-    height: auto;
+    width: 80px;
+    height: 80px;
     object-fit: contain;
-    margin-bottom: 0.25rem;
+    display: block;
 }
 
-
 .airlineInfo span {
+    margin-top: 10px;
     font-size: 1rem;
-     color: #718096;
+    font-weight: 700;
+    color: #4a5568;
+    line-height: 1;
+    white-space: nowrap;
 }
 
 .flightDetails {
@@ -129,6 +146,7 @@
     align-items: center;
     justify-content: center;
     gap: 1rem;
+    text-align: center;
 }
 
 .timeLocation {
@@ -156,6 +174,24 @@
     min-width: 60px;
 }
 
+.line-2way {
+    border: 1px solid #e2e8f0;
+    min-width: 40px;
+    /* Reduced min-width to fit tablets */
+    flex-grow: 1;
+    height: 2px;
+}
+
+/* New Wrapper for Price + Button */
+.flightCard-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    gap: 15px;
+}
+
 .flightPrice strong {
     font-size: 1.75rem;
     font-weight: 700;
@@ -177,6 +213,7 @@
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.2s;
+    white-space: nowrap;
 }
 
 .bookButton:hover {
@@ -190,13 +227,7 @@
     font-size: 1.1rem;
 }
 
-.line-2way {
-    border: 1px solid #e2e8f0;
-    min-width: 100px;
-    height: 2px;
-}
-
-/* --- Loader Styles --- */
+/* --- Loader --- */
 .loaderContainer {
     display: flex;
     justify-content: center;
@@ -211,8 +242,8 @@
 }
 
 .loader {
-    border: 8px solid #f3f3f3; /* Light grey */
-    border-top: 8px solid #2a5d4f; /* Theme color */
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #2a5d4f;
     border-radius: 50%;
     width: 60px;
     height: 60px;
@@ -220,6 +251,158 @@
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* --- MEDIA QUERIES (RESPONSIVENESS) --- */
+
+/* Tablet & Smaller Laptops (Max Width 900px) */
+@media (max-width: 900px) {
+    .flightCard {
+        /* Switch to 2 columns: [Airline] [Details] */
+        grid-template-columns: 120px 1fr;
+        grid-template-rows: auto auto;
+        /* Two rows */
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    /* Move Actions (Price/Btn) to the bottom row, spanning full width */
+    .flightCard-actions {
+        grid-column: 1 / -1;
+        /* Span all columns */
+        flex-direction: row;
+        /* Horizontal layout */
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid #f0f0f0;
+        padding-top: 1rem;
+    }
+
+    .flightPrice {
+        text-align: left;
+    }
+
+    /* Center header text */
+    .resultsHeader h2 {
+        font-size: 1.25rem;
+    }
+}
+
+/* Mobile Devices (Max Width 600px) */
+@media (max-width: 600px) {
+    .resultsHeader {
+        padding: 1rem;
+    }
+
+    .resultsContainer {
+        padding: 1rem;
+    }
+
+    .filterBar {
+        flex-direction: column;
+        width: 100%;
+        align-items: stretch;
+    }
+
+    .dateInput {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .filterButton {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .flightCard {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    /* Top Row: Airline Logo Left, Name Right */
+    .airlineInfo {
+        flex-direction: row;
+        width: 100%;
+        justify-content: flex-start;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+        border-bottom: 1px dashed #eee;
+        padding-bottom: 0.5rem;
+        height: auto;
+    }
+
+    .airlineInfo img {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 0;
+    }
+
+    .airlineInfo span {
+        margin-top: 0;
+        font-size: 1.1rem;
+    }
+
+    /* Middle Row: Flight Details */
+    .flightDetails {
+        justify-content: space-between;
+        width: 100%;
+        gap: 0;
+    }
+
+    .line-2way {
+        display: none;
+    }
+
+    /* Hide lines on small screens */
+    .mobile-hide-date {
+        display: none;
+    }
+
+    /* Class added in React to hide redundant dates */
+
+    /* Adjust text sizes for mobile fitting */
+    .timeLocation strong {
+        font-size: 1.25rem;
+    }
+
+    /* Bottom Row: Actions */
+    .flightCard-actions {
+        margin-top: 0.5rem;
+        padding-top: 1rem;
+    }
+
+    .bookButton {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    /* Modal Mobile Adjustments */
+    .bookingModal-content {
+        width: 95%;
+    }
+
+    .bookingModal-passengerGrid {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .bookingModal-formGroup {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .bookingModal-formGroup input {
+        width: 60px;
+        text-align: center;
+    }
 }

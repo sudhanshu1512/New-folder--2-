@@ -285,7 +285,7 @@ router.post('/confirm-booking', authenticateJWT, async (req, res) => {
 
         await headerRequest
             .input('OrderID', sql.VarChar(25), bookingId)
-            .input('sector', sql.VarChar(20), `${flightDetails.fromCode}-${flightDetails.toCode}`) // Format: DEL-BOM
+            .input('sector', sql.VarChar(20), flightDetails.sector) // Format: DEL-BOM
             .input('Status', sql.VarChar(20), 'CONFIRMED')
             .input('VC', sql.Char(2), flightDetails.vc || 'XX') // Validating Carrier from flightDetails
             .input('Duration', sql.VarChar(20), flightDetails.duration)
@@ -377,7 +377,7 @@ router.post('/confirm-booking', authenticateJWT, async (req, res) => {
             agencyName: bookingAgentData?.Agency_Name || null,
             invoiceNo: `INV-${bookingId}`,
             pnrNo: flightDetails.pnr,
-            ticketNo: null,
+            ticketNo: flightDetails.ticketID,
             ticketingCarrier: (flightDetails.airline || '').substring(0, 149),
             accountId: bookingAgentData?.AgencyId || userId,
             executiveId: null,
@@ -450,13 +450,62 @@ router.post('/confirm-booking', authenticateJWT, async (req, res) => {
         // --- 7. Prepare Response Data ---
         const fullBookingDetails = {
             booking_id: bookingId,
+            bookingRefNo: bookingId, // Using same as booking_id
+            bookingStatus: 'CONFIRMED',
             bookingDateIST: bookingDateIST,
-            quote_id: quoteId,
-            status: 'CONFIRMED',
-            flight: flightDetails,
-            passengers: passengers,
-            contactDetails: contactDetails,
-            totalAmount: totalAmount
+            airlinePNR: flightDetails.pnr || 'N/A',
+            flight: {
+                airline: flightDetails.airline,
+                airlineLogo: flightDetails.airlineLogo || '',
+                flightNo: flightDetails.flightNo,
+                from: flightDetails.from,
+                fromCode: flightDetails.fromCode,
+                to: flightDetails.to,
+                toCode: flightDetails.toCode,
+                departureDate: flightDetails.departureDate,
+                departureTime: flightDetails.departureDate,
+                arrivalDate:flightDetails.arrivalDate,
+                arrivalTime: flightDetails.arrivalDate,
+                departureterminal: flightDetails.departureterminal || 'N/A',
+                arrivalterminal: flightDetails.arrivalterminal || 'N/A',
+                duration: flightDetails.duration,
+                cabin: flightDetails.cabin || 'Economy',
+                stops: flightDetails.stops || 0,
+                baggage: flightDetails.baggage
+            },
+            passengers: passengers.map(passenger => ({
+                title: passenger.title,
+                firstName: passenger.firstName,
+                lastName: passenger.lastName,
+                type: passenger.type,
+                ticketNo: flightDetails.ticketID || 'N/A',
+                seat: passenger.seat || 'N/A',
+            })),
+            contactDetails: {
+                email: contactDetails.email,
+                phone: contactDetails.phone
+            },
+            fareRule: 'Non Refundable',
+            fareBreakdown: {
+                basePrice: priceBreakdown?.basePrice || 0,
+                fuelSurcharge: priceBreakdown?.fuelSurcharge || 0,
+                airlineTaxes: priceBreakdown?.taxes || 0,
+                sgst: priceBreakdown?.sgst || 0,
+                cgst: priceBreakdown?.cgst || 0,
+                totalAmount: totalAmount
+            },
+            // Agency details from agent data
+            companyName: bookingAgentData?.Agency_Name || 'Your Travel Company',
+            agentName: `${bookingAgentData?.Fname || ''} ${bookingAgentData?.Lname || ''}`.trim(),
+            agencyAddress: [
+                bookingAgentData?.Address,
+                bookingAgentData?.City,
+                bookingAgentData?.State,
+                bookingAgentData?.Country,
+                bookingAgentData?.zipcode
+            ].filter(Boolean).join(', '),
+            agencyPhone: bookingAgentData?.Mobile || bookingAgentData?.Phone || 'N/A',
+            agencyEmail: bookingAgentData?.Email || 'N/A'
         };
 
         // --- 8. Send Response & Trigger Email ---
@@ -520,9 +569,12 @@ router.get('/booking/:bookingId', async (req, res) => {
             userId: bookingData.user_id,
             bookingDate: bookingData.booking_date,
             status: bookingData.status,
+            ticketno: bookingData.ticketno,
+            pnr: bookingData.pnr,
             flight: {
                 id: bookingData.flight_id,
                 flightNo: bookingData.flight_no,
+                airlinecode: bookingData.airlinecode,
                 airline: bookingData.airline,
                 from: bookingData.departurecity,
                 to: bookingData.arrivalcity,
@@ -539,7 +591,7 @@ router.get('/booking/:bookingId', async (req, res) => {
                 depairname: bookingData.depairname,
                 arrairname: bookingData.arrairname,
                 baggage: bookingData.baggage,
-                
+
             },
             passengers: passengersData.map(p => ({
                 id: p.id,
@@ -554,7 +606,8 @@ router.get('/booking/:bookingId', async (req, res) => {
             contact: {
                 email: bookingData.contact_email,
                 phone: bookingData.contact_phone,
-                countryCode: bookingData.country_code
+                depcountryCode: bookingData.depcountrycode,
+                arrcountryCode: bookingData.arrcountrycode
             },
             pricing: {
                 basePrice: bookingData.base_price,
@@ -652,17 +705,18 @@ router.get('/my-bookings', authenticateJWT, async (req, res) => {
     const pool = await getDbPool();
     try {
         const userId = req.user.id;
-        
-        // Default to page 1, limit 10. 
-        // Frontend will send ?limit=3 for "Recent" view.
         const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10; 
+        const limit = parseInt(req.query.limit) || 10;
         const offset = (page - 1) * limit;
+        
+        // NEW: Get filter from query, default to 'ALL'
+        const filter = req.query.filter || 'ALL'; 
 
         const result = await pool.request()
             .input('UserId', sql.VarChar(50), userId)
             .input('offset', sql.Int, offset)
             .input('limit', sql.Int, limit)
+            .input('filterType', sql.NVarChar(20), filter) // Pass to SP
             .execute('GetUserBookingsWithPagination');
 
         const total = result.recordsets[0][0].total;
@@ -773,7 +827,6 @@ router.put('/booking/:bookingId/cancel', authenticateJWT, async (req, res) => {
             .input('bookingId', sql.NVarChar(50), bookingId)
             .input('userId', sql.NVarChar(50), String(userId)) // Ensure string type match
             .input('cancellationReason', sql.NVarChar(500), cancellationReason)
-            .input('cancelledAt', sql.DateTime2, cancelledAt.toISOString())
             .execute('CancelBooking');
 
         const spResult = result.recordset[0];
@@ -852,6 +905,45 @@ router.put('/booking/:bookingId/cancel', authenticateJWT, async (req, res) => {
         });
     }
 });
+
+// Ensure 'pool' and 'sql' are imported/required at the top of your file
+
+router.post('/booking/:bookingId/sendtkt', authenticateJWT, async (req, res) => {
+    const { bookingId } = req.params;
+
+    const pool = await getDbPool();
+
+    try {
+        // FIX 1: Removed the comma after @status
+        const query = `
+            UPDATE EmailQueue 
+            SET status = @status,
+            max_attempts = max_attempts + 1,
+            next_attempt_at =  GETDATE()
+            WHERE booking_id = @id
+        `;
+
+        // Ensure 'pool' is connected before this request
+        const request = pool.request();
+
+        request.input('status', sql.VarChar(50), 'PENDING');
+        request.input('id', sql.VarChar(50), bookingId);
+
+        const result = await request.query(query);
+
+        if (result.rowsAffected[0] === 0) {
+            return res.status(404).json({ success: false, message: 'Inventory record not found or ID incorrect.' });
+        }
+
+        // FIX 2: Added a success response (The original code didn't send anything back on success)
+        return res.status(200).json({ success: true, message: 'Ticket send request queued successfully.' });
+
+    } catch (error) {
+        console.error(`Error sending ticket via email:`, error);
+        res.status(500).json({ success: false, message: 'Failed to send ticket via email.' });
+    }
+});
+    
 
 
 export { sendConfirmationEmailWithRetry, insertLedgerRecordWithRetry };
