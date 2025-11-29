@@ -23,7 +23,7 @@ if (missingVars.length > 0) {
 import authRouter from './src/routes/auth.js';
 import bookingRouter from './src/routes/boookingRoutes.js';
 import bookingConfirmationRouter from './src/routes/bookingConfirmationRoutes.js';
-import cloudinaryRoutes from './src/routes/Cloudinary.js';
+import cloudinaryRoutes from './src/routes/cloudinary.js';
 import logoRoutes from './src/routes/settings.js';
 import profileRoutes from './src/routes/profile.js';
 import airportRoutes from './src/routes/airportRoutes.js';
@@ -45,18 +45,11 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"], // Added unsafe-inline/eval for common React issues
-      connectSrc: [
-        "'self'", 
-        "https://books-vm03.onrender.com",       // Your Backend URL
-        "https://new-folder-2-4ub8.onrender.com", // Your Frontend URL (from logs)
-        process.env.FRONTEND_URL                 // Your Environment Variable
-      ], 
-      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"], 
+      connectSrc: ["'self'", "https://your-frontend-app.onrender.com"], // Allow frontend to connect
+      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"], // <--- ALLOW CLOUDINARY HERE
     },
   })
 );
-
 
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
