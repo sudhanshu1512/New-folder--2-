@@ -475,7 +475,9 @@ router.get('/quote/:quoteId', async (req, res) => {
                 trip: quoteData.trip,
                 tripType: quoteData.tripType,
                 stops: quoteData.stops,
-                sector: quoteData.sector
+                sector: quoteData.sector,
+                depairname: quoteData.depairname,
+                arrairname: quoteData.arrairname 
                 
             },
             priceBreakdown: {

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Assume the backend is running on this URL. Change if necessary.
-const API_BASE_URL = 'https://new-folder-2-4ub8.onrender.com/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,

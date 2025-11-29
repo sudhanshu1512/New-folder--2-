@@ -4,11 +4,9 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { initializeEmailQueue, shutdownEmailQueue } from './src/startup/emailQueueInit.js';
-import path from "path";
 
 
-const _dirname = path.resolve();
-console.log("Current directory:", _dirname);
+
 
 // Verify required environment variables
 const requiredEnvVars = ['DB_SERVER', 'DB_NAME', 'JWT_SECRET', 'FRONTEND_URL'];
@@ -35,27 +33,19 @@ import supplierRoutes from './src/routes/supplierRoutes.js';
 import dashboardRoutes from './src/routes/Dashboard.js';
 import ledgerRoutes from './src/routes/LedgerReport.js';
 import queryRoutes from './src/routes/QueryRoutes.js';
+import supplierTicketRoutes from './src/routes/SupplierTicket.js';
 
 const app = express();
 
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"],
-      connectSrc: ["'self'", "https://your-frontend-app.onrender.com"], // Allow frontend to connect
-      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"], // <--- ALLOW CLOUDINARY HERE
-    },
-  })
-);
-
+app.use(helmet());
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
@@ -64,6 +54,7 @@ app.use(cookieParser());
 // Test route
 app.get('/', (_, res) => res.send({ ok: true, message: 'Server is running' }));
 
+// API Routes
 app.use('/api/auth', authRouter);
 app.use('/api', bookingRouter);
 app.use('/api/bookings', bookingConfirmationRouter);
@@ -79,11 +70,7 @@ app.use('/api', supplierRoutes);
 app.use('/api', dashboardRoutes);
 app.use('/api/ledger', ledgerRoutes);
 app.use('/api', queryRoutes);
-
-app.use(express.static(path.join(_dirname, "/front/dist")));
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(_dirname, "front", "dist", "index.html"));
-})
+app.use('/api', supplierTicketRoutes);
 
 // Log all registered routes
 console.log('Registered routes:');

@@ -180,8 +180,38 @@ const BookingDetails = () => {
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
         return new Date(dateString).toLocaleDateString('en-IN', {
-            weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour24: true
+            weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour24: true,timeZone: 'UTC'
         });
+    };
+
+    const travelDate = (dateString) => {
+        if (!dateString) return 'N/A';
+
+        try {
+            // 1. Split the "dd/mm/yyyy" string by the slash
+            const parts = dateString.split('/');
+
+            // 2. Extract day, month, and year
+            // We ensure they are numbers for the constructor
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10);
+            const year = parseInt(parts[2], 10);
+
+            // 3. Create the Date object
+            // Note: JavaScript counts months from 0 to 11 (Jan is 0, Dec is 11).
+            // So we must do (month - 1).
+            const dateObj = new Date(year, month - 1, day);
+
+            return dateObj.toLocaleDateString('en-IN', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+            });
+        } catch (e) {
+            console.error(e);
+            return dateString; // Fallback
+        }
     };
 
     if (loading) return (
@@ -249,7 +279,7 @@ const BookingDetails = () => {
                                     <span className={styles.timeLarge}>{booking.flight.departureTime}</span>
                                     <span className={styles.cityCodeLarge}>{booking.flight.from} {booking.flight.departureairportname}</span>
                                     <span className={styles.cityCodeLarge}>{booking.flight.depairname}</span>
-                                    <span className={styles.dateSmall}>{booking.flight.depDate}</span>
+                                    <span className={styles.dateSmall}>{travelDate(booking.flight.depDate)}</span>
                                     <span className={styles.terminalInfo}>Term {booking.flight.departureterminal || '-'}</span>
                                 </div>
 
@@ -263,7 +293,7 @@ const BookingDetails = () => {
                                     <span className={styles.timeLarge}>{booking.flight.arrivalTime}</span>
                                     <span className={styles.cityCodeLarge}>{booking.flight.to} {booking.flight.arrivalairportname}</span>
                                     <span className={styles.cityCodeLarge}>{booking.flight.arrairname}</span>
-                                    <span className={styles.dateSmall}>{booking.flight.arrDate}</span>
+                                    <span className={styles.dateSmall}>{travelDate(booking.flight.arrDate)}</span>
                                     <span className={styles.terminalInfo}>Term {booking.flight.arrivalterminal || '-'}</span>
                                 </div>
                             </div>
@@ -397,7 +427,7 @@ const BookingDetails = () => {
                         </div>
                     </div>
 
-                    {booking.status === 'CONFIRMED' && (
+                    {/* {booking.status === 'CONFIRMED' && (
                         <div className={styles.actionCard}>
                             <button
                                 className={styles.cancelBtnFull}
@@ -418,7 +448,7 @@ const BookingDetails = () => {
                             <p><strong>Reason :</strong> {booking.cancellation.reason}</p>
                             <p><strong>Date:</strong> {formatDate(booking.cancellation.cancelledAt)}</p>
                         </div>
-                    )}
+                    )} */}
                 </div>
             </div>
         </div>

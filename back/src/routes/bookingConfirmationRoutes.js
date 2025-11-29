@@ -463,15 +463,17 @@ router.post('/confirm-booking', authenticateJWT, async (req, res) => {
                 to: flightDetails.to,
                 toCode: flightDetails.toCode,
                 departureDate: flightDetails.departureDate,
-                departureTime: flightDetails.departureDate,
+                departureTime: flightDetails.departureTime,
                 arrivalDate:flightDetails.arrivalDate,
-                arrivalTime: flightDetails.arrivalDate,
+                arrivalTime: flightDetails.arrivalTime,
                 departureterminal: flightDetails.departureterminal || 'N/A',
                 arrivalterminal: flightDetails.arrivalterminal || 'N/A',
                 duration: flightDetails.duration,
                 cabin: flightDetails.cabin || 'Economy',
                 stops: flightDetails.stops || 0,
-                baggage: flightDetails.baggage
+                baggage: flightDetails.baggage,
+                depairname: flightDetails.depairname,
+                arrairname: flightDetails.arrairname
             },
             passengers: passengers.map(passenger => ({
                 title: passenger.title,
@@ -918,7 +920,7 @@ router.post('/booking/:bookingId/sendtkt', authenticateJWT, async (req, res) => 
         const query = `
             UPDATE EmailQueue 
             SET status = @status,
-            max_attempts = max_attempts + 1,
+            max_attempts = max_attempts +1,
             next_attempt_at =  GETDATE()
             WHERE booking_id = @id
         `;
