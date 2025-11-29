@@ -15,7 +15,7 @@ const config = {
   port: parseInt(process.env.DB_PORT) || 1433,
   options: {
     encrypt: false, // For development
-    trustServerCertificate: true // For local development
+    trustServerCertificate: true ,// For local development
     // The tunnel connection is slow. We need to tell the driver to wait longer.
     connectTimeout: 60000, // Wait 60 seconds before giving up (Default is 15s)
     requestTimeout: 60000, // Wait 60 seconds for a query to return
