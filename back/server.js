@@ -45,11 +45,18 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-      connectSrc: ["'self'", "https://your-frontend-app.onrender.com"], // Allow frontend to connect
-      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"], // <--- ALLOW CLOUDINARY HERE
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"], // Added unsafe-inline/eval for common React issues
+      connectSrc: [
+        "'self'", 
+        "https://books-vm03.onrender.com",       // Your Backend URL
+        "https://new-folder-2-4ub8.onrender.com", // Your Frontend URL (from logs)
+        process.env.FRONTEND_URL                 // Your Environment Variable
+      ], 
+      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"], 
     },
   })
 );
+
 
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
