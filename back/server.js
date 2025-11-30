@@ -1,20 +1,21 @@
-import './src/config.js'; // Load environment variables
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { initializeEmailQueue, shutdownEmailQueue } from './src/startup/emailQueueInit.js';
+import path from "path";
 
 
-
+const _dirname = path.resolve();
+console.log("Current directory:", _dirname);
 
 // Verify required environment variables
 const requiredEnvVars = ['DB_SERVER', 'DB_NAME', 'JWT_SECRET', 'FRONTEND_URL'];
 const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
 
 if (missingVars.length > 0) {
-  console.error('Missing required environment variables:', missingVars.join(', '));
-  process.exit(1);
+console.error('Missing required environment variables:', missingVars.join(', '));
+process.exit(1);
 }
 
 // Import routes after env vars are loaded
@@ -34,18 +35,35 @@ import dashboardRoutes from './src/routes/Dashboard.js';
 import ledgerRoutes from './src/routes/LedgerReport.js';
 import queryRoutes from './src/routes/QueryRoutes.js';
 import supplierTicketRoutes from './src/routes/SupplierTicket.js';
-
 const app = express();
 
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(helmet());
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"], // Added unsafe-inline/eval for common React issues
+      connectSrc: [
+        "'self'", 
+        "https://books-vm03.onrender.com",       // Your Backend URL
+        "https://new-folder-2-4ub8.onrender.com", // Your Frontend URL (from logs)
+        process.env.FRONTEND_URL                 // Your Environment Variable
+      ], 
+      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"], 
+      connectSrc: ["'self'", "https://your-frontend-app.onrender.com"], // Allow frontend to connect
+      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"], // <--- ALLOW CLOUDINARY HERE
+    },
+  })
+);
+
+
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 
 app.use(express.json());
@@ -71,6 +89,11 @@ app.use('/api', dashboardRoutes);
 app.use('/api/ledger', ledgerRoutes);
 app.use('/api', queryRoutes);
 app.use('/api', supplierTicketRoutes);
+
+app.use(express.static(path.join(_dirname, "/front/dist")));
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(_dirname, "front", "dist", "index.html"));
+})
 
 // Log all registered routes
 console.log('Registered routes:');
@@ -151,7 +174,7 @@ const server = app.listen(PORT, async () => {
   });
   console.log('Environment variables loaded:', Object.keys(process.env).filter(key => requiredEnvVars.includes(key)));
   console.log(`API running on http://localhost:${PORT}`);
-  
+
   // Initialize email queue system after server starts
   await initializeEmailQueue();
 });
@@ -173,4 +196,5 @@ process.on('SIGINT', () => {
     console.log('Server closed');
     process.exit(0);
   });
+});
 });
