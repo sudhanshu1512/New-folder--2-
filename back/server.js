@@ -80,6 +80,25 @@ app._router.stack.forEach((r) => {
   }
 });
 
+// Middleware
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"], // Added unsafe-inline/eval for common React issues
+      connectSrc: [
+        "'self'", 
+        "https://books-vm03.onrender.com",       // Your Backend URL
+        "https://new-folder-2-4ub8.onrender.com", // Your Frontend URL (from logs)
+        process.env.FRONTEND_URL                 // Your Environment Variable
+      ], 
+      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"], 
+      connectSrc: ["'self'", "https://your-frontend-app.onrender.com"], // Allow frontend to connect
+      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"], // <--- ALLOW CLOUDINARY HERE
+    },
+  })
+);
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
